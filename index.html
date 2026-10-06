@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Write down a dream. See which symbols a hand-written index finds in it, and what each has traditionally been taken to mean. Not AI, not a diagnosis — and nothing you type leaves the page.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAZ0lEQVR42mNgGAVDDeT76/8fMItheMAsHtmW09UB2CwfOQ7AZfnIcAA+y0cdMOoAujiCGAfQ1BFDxgGDxhE0cQipDiDFEUSrJccRVA2tAXcALRxBt/RA9YQ6oJYPquw5aCqsUUBtAABmd/HUgGcmigAAAABJRU5ErkJggg==">
+<title>What Did You Dream?</title>
+<style>
+  /* ---------- base ---------- */
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --paper: #faf8f4;
+    --card: #ffffff;
+    --ink: #1d1b18;
+    --soft: #57524a;
+    --faint: #7d766c;
+    --line: #e5e0d6;
+    --line-strong: #d6cfc2;
+    --accent: #6f4f2f;
+    --accent-soft: #f2ece2;
+    --radius: 10px;
+    --serif: ui-serif, "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+    --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #16151a;
+      --card: #1e1d23;
+      --ink: #ece8e1;
+      --soft: #b9b2a6;
+      --faint: #938b7e;
+      --line: #302e36;
+      --line-strong: #413e48;
+      --accent: #d9b489;
+      --accent-soft: #26242b;
+    }
+  }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.6;
+    overflow-wrap: break-word;
+  }
+  .wrap {
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: 1.5rem 1.15rem 3rem;
+  }
+  h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.25; }
+  h1 { font-size: 1.65rem; margin: 0 0 .35rem; letter-spacing: -.01em; }
+  h2 { font-size: 1.15rem; margin: 0 0 .6rem; }
+  h3 { font-size: 1.05rem; margin: 0 0 .5rem; }
+  p { margin: 0 0 .75rem; }
+  a { color: var(--accent); }
+
+  /* ---------- header ---------- */
+  header.site { border-bottom: 1px solid var(--line); padding-bottom: 1rem; margin-bottom: 1.4rem; }
+  .tagline { color: var(--soft); margin: 0 0 .6rem; font-size: .95rem; }
+  .disclosure {
+    font-size: .82rem;
+    color: var(--faint);
+    border-left: 3px solid var(--line-strong);
+    padding-left: .7rem;
+    margin: 0;
+  }
+
+  /* ---------- input ---------- */
+  label.field { display: block; font-weight: 600; font-size: .95rem; margin-bottom: .4rem; }
+  textarea {
+    width: 100%;
+    min-height: 9rem;
+    padding: .8rem .9rem;
+    font: inherit;
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--ink);
+    background: var(--card);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    resize: vertical;
+    display: block;
+  }
+  textarea:focus-visible, button:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .hint { font-size: .82rem; color: var(--faint); margin: .5rem 0 0; }
+  /* ---------- mood (optional) ---------- */
+  fieldset.mood {
+    margin: .85rem 0 0;
+    padding: .7rem .85rem .55rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--card);
+  }
+  fieldset.mood legend { font-size: .82rem; color: var(--soft); padding: 0 .35rem; }
+  fieldset.mood legend .opt { color: var(--faint); }
+  fieldset.mood label {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    font-size: .88rem;
+    color: var(--soft);
+    margin: 0 .9rem .25rem 0;
+    cursor: pointer;
+  }
+  fieldset.mood input { accent-color: var(--accent); }
+  .row { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: .85rem; }
+  button {
+    font: inherit;
+    font-size: .95rem;
+    padding: .62rem 1.05rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--line-strong);
+    background: var(--card);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  button.primary { background: var(--accent); border-color: var(--accent); color: var(--paper); font-weight: 600; }
+  @media (prefers-color-scheme: dark) { button.primary { color: #201d18; } }
+  button:hover { border-color: var(--accent); }
+
+  /* ---------- results ---------- */
+  #results { margin-top: 2rem; }
+  #results[hidden] { display: none; }
+  .panel {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1rem 1.05rem;
+    margin-bottom: 1.1rem;
+  }
+  .kicker { font-size: .78rem; letter-spacing: .09em; text-transform: uppercase; color: var(--faint); margin: 0 0 .4rem; }
+  .chips { display: flex; flex-wrap: wrap; gap: .4rem; margin: .2rem 0 0; padding: 0; list-style: none; }
+  .chips li {
+    font-size: .82rem;
+    background: var(--accent-soft);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: .18rem .62rem;
+    color: var(--soft);
+  }
+  .symbol { border-top: 1px solid var(--line); padding-top: .9rem; margin-top: .9rem; }
+  .symbol:first-of-type { border-top: 0; padding-top: 0; margin-top: 0; }
+  .symbol .name { display: flex; flex-wrap: wrap; align-items: baseline; gap: .5rem; margin-bottom: .45rem; }
+  .symbol .name h3 { margin: 0; }
+  .symbol .group { font-size: .74rem; letter-spacing: .06em; text-transform: uppercase; color: var(--faint); }
+  .line { margin: 0 0 .55rem; }
+  .line:last-child { margin-bottom: 0; }
+  .line b {
+    display: block;
+    font-size: .76rem;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: var(--faint);
+    font-weight: 600;
+  }
+  .found { font-size: .9rem; color: var(--soft); }
+  .found strong { color: var(--ink); }
+  .matched { font-size: .8rem; color: var(--faint); margin: .1rem 0 .5rem; }
+  .matched em { font-style: normal; color: var(--soft); }
+  .moodnote {
+    font-size: .9rem; color: var(--soft);
+    border-left: 3px solid var(--accent-soft);
+    padding-left: .7rem; margin: 0 0 .6rem;
+  }
+  details.more { margin-top: .6rem; }
+  details.more > summary { cursor: pointer; font-size: .9rem; color: var(--accent); }
+  details.more[open] > summary { margin-bottom: .5rem; }
+  .weaknote { font-size: .85rem; color: var(--faint); margin: .5rem 0 0; }
+
+  /* ---------- browse ---------- */
+  details.browse { border: 1px solid var(--line); border-radius: var(--radius); background: var(--card); padding: .8rem 1.05rem; }
+  details.browse > summary { cursor: pointer; font-weight: 600; font-family: var(--serif); font-size: 1.05rem; }
+  .letter { font-size: .78rem; letter-spacing: .09em; text-transform: uppercase; color: var(--faint); margin: 1.1rem 0 .35rem; }
+  .browse-item { margin: 0 0 .45rem; font-size: .93rem; color: var(--soft); }
+  .browse-item b { color: var(--ink); font-weight: 600; }
+
+  footer.site {
+    margin-top: 2.2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    font-size: .85rem;
+    color: var(--faint);
+  }
+  footer.site p { margin: 0 0 .35rem; }
+  .empty { color: var(--soft); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="site">
+    <h1 id="site-name">What Did You Dream?</h1>
+    <p class="tagline">Write it the way you would tell someone. Messy is fine — fragments count.</p>
+  </header>
+
+  <main>
+    <label class="field" for="dream">What did you dream?</label>
+    <textarea id="dream" rows="7" spellcheck="false" placeholder="I was back in my old school, late for an exam I hadn't studied for. I couldn't find the classroom, and when I got there everyone was watching me."></textarea>
+    <fieldset class="mood">
+      <legend>How did it feel while you were in it? <span class="opt">optional</span></legend>
+      <label><input type="checkbox" name="mood" value="Afraid"> Afraid</label>
+      <label><input type="checkbox" name="mood" value="Ashamed"> Ashamed</label>
+      <label><input type="checkbox" name="mood" value="Relieved"> Relieved</label>
+      <label><input type="checkbox" name="mood" value="Calm"> Calm</label>
+      <label><input type="checkbox" name="mood" value="It made no sense"> It made no sense</label>
+      <label><input type="checkbox" name="mood" value="Can't say"> Can't say</label>
+    </fieldset>
+    <p class="hint">The more you name — places, people, objects, what happened — the more there is to work with. Nothing you type leaves this page: no server, no account, nothing saved. The readings come from a fixed, hand-written dictionary of dream symbols, not from AI.</p>
+    <div class="row">
+      <button class="primary" id="analyze" type="button">Read my dream</button>
+      <button id="sample" type="button">Try an example</button>
+      <button id="clear" type="button">Clear</button>
+    </div>
+
+    <section id="results" hidden aria-live="polite"></section>
+
+    <details class="browse">
+      <summary>Browse the full index</summary>
+      <div id="browse-body"></div>
+    </details>
+  </main>
+
+  <footer class="site">
+    <p><span id="footer-name">What Did You Dream?</span> — a static page. No accounts, no tracking, no analytics.</p>
+    <p>For reflection, not diagnosis.</p>
+  </footer>
+
+</div>
+
+<script>
+"use strict";
+
+/* =====================================================================
+   SITE NAME
+   Change this one line to rebrand the whole page (title, heading,
+   footer and the results text all read from it).
+   Name:              "What Did You Dream?"
+   Alternatives considered:  "Sleep Signals"  |  "What Did You Dream?" (chosen)
+   ===================================================================== */
+var SITE_NAME = "What Did You Dream?";
+
+/* =====================================================================
+   SYMBOL DICTIONARY — DICT-START
+   Each entry:
+     id  short slug (used in tests and in 符号词典.md)
+     n   display name
+     g   group (used to write the summary paragraph)
+     k   keyword list. Single words are matched with light inflection
+         tolerance (s / es / ed / ing / doubling); anything irregular
+         (fell, teeth, swept) is listed explicitly.
+     p   plain meaning, one sentence
+     t   what tradition says, 2-3 sentences
+     q   one gentle question, no conclusion
+   ===================================================================== */
+var DICT = [
+  { id: "water", n: "Water", g: "Water & weather",
+    k: ["water", "waters", "puddle", "puddles", "leaking", "leak", "wet", "soaked", "drenched", "flooded room"],
+    p: "Water is the most common setting in dreams, and it usually stands in for feelings — calm water for calm feelings, rough water for strong ones.",
+    t: "A common reading in dream lore treats water as the dreamer's emotional weather. Clear, still water tends to be read as ease; murky or moving water as feelings that have not been sorted out yet. In Jungian terms it is often described as the contents of the unconscious, which is why it can be a place rather than a thing.",
+    q: "What did the water look like in your dream, and how close is that to how the last few weeks have felt?" },
+
+  { id: "flooding", n: "Flooding & drowning", g: "Water & weather",
+    k: ["flood", "floods", "flooding", "drown", "drowned", "drowning", "underwater", "sinking", "sank", "submerged", "tide", "tidal", "wave", "waves", "tsunami", "swamped"],
+    p: "Being overwhelmed by water suggests something in waking life that has grown bigger than you can comfortably hold.",
+    t: "Folk tradition usually reads flooding as pressure that arrived faster than expected — a bill, a deadline, a family situation. Drowning carries the same idea with a stronger note of helplessness attached. Some Jungian writers describe it as being pulled under by material that was pushed aside and then came back.",
+    q: "Is there anything right now that keeps asking for more room than you have to give it?" },
+
+  { id: "ocean", n: "Ocean & sea", g: "Water & weather",
+    k: ["ocean", "sea", "seaside", "coast", "beach", "shore", "horizon"],
+    p: "The open sea tends to stand for the biggest, least charted parts of a life — the future, the unknown, or feelings with no clear edge.",
+    t: "A common reading in dream lore links the sea to things that are real and powerful but not personal: weather, time, distance. In Jungian terms it is a standard image for the collective unconscious, the part of experience that is shared rather than private. Standing on a shore is usually read as being close to something large without being in it yet.",
+    q: "In the dream, were you watching the water or in it?" },
+
+  { id: "river", n: "River & stream", g: "Water & weather",
+    k: ["river", "rivers", "stream", "streams", "creek", "rapids", "current", "upstream", "downstream", "bank of the river"],
+    p: "A river is usually read as the direction a life is already flowing — the path you are on whether or not you chose it.",
+    t: "Dream lore often treats a river as the course of a life or of time. Crossing one is commonly described as a change of state; standing on the bank while it moves is described as watching change rather than being part of it. The speed of the water tends to matter more to the reading than its size.",
+    q: "Was the current carrying you somewhere, or were you standing still while it went past?" },
+
+  { id: "swimming", n: "Swimming", g: "Water & weather",
+    k: ["swimming", "swim", "swam", "waded", "wading", "swims"],
+    p: "Swimming is generally about moving through feelings under your own power rather than being carried by them.",
+    t: "The common reading is competence: you are in the water, and you are the one doing the moving. Dream lore often pairs this with drowning, and treats the difference between the two as a question of agency. In Jungian terms it is described as working consciously with emotional material instead of being flooded by it.",
+    q: "Did you feel at home in the water, or were you working harder than you wanted to?" },
+
+  { id: "floating", n: "Floating & drifting", g: "Water & weather",
+    k: ["floating", "float", "weightless", "drifting", "drift", "adrift"],
+    p: "Floating tends to arrive when effort has been taken away — rest, acceptance, or a break from carrying something.",
+    t: "Dream lore reads floating as ease, and drifting as ease that has gone a little too far. One is described as being held up; the other as having lost the ability to steer. Both are generally treated as a report on how much control the dreamer feels, rather than on what is actually happening to them.",
+    q: "Did the floating feel like rest, or like losing your place?" },
+
+  { id: "rain", n: "Rain", g: "Water & weather",
+    k: ["rain", "rains", "raining", "rained", "rainfall", "downpour", "drizzle", "storm clouds"],
+    p: "Rain is usually read as ordinary emotional weather rather than a crisis — the everyday kind of feeling, not the dramatic kind.",
+    t: "A common reading in dream lore connects rain to mood or grief, something to be waited out rather than solved. Gentle rain is generally treated as manageable; heavy rain as closer to pressure. Rain that arrives after a dry spell is often read more warmly in the same tradition.",
+    q: "If the last few weeks had a weather report, how close would it be to the rain in your dream?" },
+
+  { id: "storm", n: "Storms & thunder", g: "Water & weather",
+    k: ["storm", "storms", "stormy", "thunder", "lightning", "gale", "hurricane", "tornado", "thunderstorm"],
+    p: "Storms usually show up when something has been building for a while and is finally making noise.",
+    t: "Dream lore generally reads storms as strong feeling that arrives suddenly and passes, unlike weather that lingers. Thunder is often described as the warning and lightning as the moment of contact. The common thread in these readings is that the storm is loud but temporary.",
+    q: "What in the dream had the same shape as the storm — loud, sudden, and loudest just before it cleared?" },
+
+  { id: "snow", n: "Snow & ice", g: "Water & weather",
+    k: ["snow", "snowing", "snowed", "blizzard", "ice", "icy", "frost", "hail", "frozen lake", "icicle"],
+    p: "Snow and ice are usually read as feeling cooled down, paused, or held at a distance.",
+    t: "A common reading in dream lore treats snow as quiet and sheltering, and ice as something harder to move through. Both are described as slow states rather than bad ones. Ice that cracks or thaws carries a distinctly more hopeful reading in the same tradition.",
+    q: "Does the cold in your dream match anything you have been keeping at arm's length?" },
+
+  { id: "fog", n: "Fog & mist", g: "Water & weather",
+    k: ["fog", "foggy", "mist", "misty", "haze", "hazy"],
+    p: "Fog is generally about not being able to see far enough ahead to plan, rather than about anything being wrong.",
+    t: "Dream lore reads fog as uncertainty that is temporary and rarely threatening. It is usually described as a state of waiting rather than a warning. Where the dreamer keeps walking inside the fog is often noted, because it tends to point at what they are willing to keep moving toward.",
+    q: "In the dream, did you stop in the fog or keep walking?" },
+
+  { id: "falling", n: "Falling", g: "Falling & motion",
+    k: ["fall", "falls", "falling", "fell", "fallen", "plummet", "plummeting", "plunge", "plunging", "dropping", "free fall"],
+    p: "Falling is one of the most common dream experiences, and it is usually read as losing your footing on something — a plan, a role, a sense of control.",
+    t: "A common reading in dream lore links falling to a loss of support or a fear of failing at something visible. In most readings the feeling of the drop matters more than the landing, which is often not shown at all. In Jungian terms it is described as a descent into material the dreamer has been avoiding.",
+    q: "What were you standing on in the dream, and what does that stand for in waking life?" },
+
+  { id: "flying", n: "Flying", g: "Falling & motion",
+    k: ["flying", "fly", "flew", "flown", "soaring", "soar", "gliding", "glide", "hovering", "hover", "swooping"],
+    p: "Flying is usually read as freedom, perspective, or having gotten above a problem.",
+    t: "Dream lore commonly treats flying as confidence and mastery, especially when the flight is easy. Struggling to stay up is read the other way round: wanting the distance without quite having it yet. Jungian readings often describe flight as the mind rising above its own limits in order to look at them.",
+    q: "Was the flying easy, or were you working to stay up?" },
+
+  { id: "chased", n: "Being chased", g: "Falling & motion",
+    k: ["chased", "chasing", "chase", "pursued", "pursuing", "pursuit", "hunted", "fleeing", "fled", "running away", "ran away", "running from", "ran from", "something behind me"],
+    p: "Being chased is usually read as avoidance — something you have been staying ahead of instead of facing.",
+    t: "This is one of the most reliably interpreted images in dream lore. The common reading is that the pursuer stands for something the dreamer is not ready to turn around and look at. A detail that comes up again and again is that the dream changes as soon as the dreamer stops running, which is why so many of these dreams end before that happens.",
+    q: "If you slowed down and let whatever was behind you catch up, what do you think it would turn out to be?" },
+
+  { id: "late", n: "Running late", g: "Falling & motion",
+    k: ["late", "lateness", "running late", "running behind", "overslept", "in a hurry", "rushing", "rushed", "hurrying", "behind schedule"],
+    p: "Running late usually points at waking pressure — a schedule, an obligation, or a standard you feel you are not meeting.",
+    t: "Dream lore generally reads lateness as worry about falling short rather than as anything about time itself. Arriving late in a dream is usually described as a rehearsal of a fear, not a forecast. Oversleeping is noted in the same tradition because the dreamer so often wakes up checking the clock.",
+    q: "Whose timetable were you trying to keep in the dream — yours, or someone else's?" },
+
+  { id: "lost", n: "Getting lost", g: "Falling & motion",
+    k: ["got lost", "getting lost", "losing my way", "lost my way", "maze", "wandered", "wandering", "stranded", "wrong turn", "couldn't find my way", "could not find my way", "no way out", "lost in the", "was lost", "felt lost"],
+    p: "Getting lost usually mirrors a stretch of life where the next step is not obvious yet.",
+    t: "A common reading treats lostness as a transition rather than a failure. Dream lore often distinguishes between being lost in a familiar place and being lost somewhere new, reading the first as disorientation and the second as exploration. Either way the image is read as temporary by definition.",
+    q: "Was the place you were lost in somewhere you knew, or somewhere you had never been?" },
+
+  { id: "stuck", n: "Stuck & unable to move", g: "Falling & motion",
+    k: ["stuck", "trapped", "paralyzed", "paralysed", "frozen in place", "couldn't move", "could not move", "crawling", "slow motion", "couldn't run", "could not run"],
+    p: "Being stuck is usually read as a situation where you know what you want and cannot make it happen.",
+    t: "Dream lore commonly links paralysis to the gap between intention and ability: the wish to act is there, and nothing follows from it. Slow motion is described the same way, only with the effort still visible. Because the feeling in the dream is so physical, it is often remembered for years after the details are gone.",
+    q: "Where in your life are you clear about what you want to do, and still not doing it?" },
+
+  { id: "climbing", n: "Climbing", g: "Falling & motion",
+    k: ["climbing", "climb", "climbed", "ladder", "scaling", "ascending", "ascent", "rope", "foothold", "scrambling up"],
+    p: "Climbing is usually read as effort toward something that matters, with the height standing for how far there is left to go.",
+    t: "Dream lore generally treats climbing as ambition or recovery. A common reading notes that the difficulty of the climb is a better clue than the view from the top. Slipping on a climb is usually described as fear of losing progress that has already been made.",
+    q: "How hard was the climb, and how hard does the same thing feel while you are awake?" },
+
+  { id: "choking", n: "Choking & trouble breathing", g: "Falling & motion",
+    k: ["choking", "choked", "can't breathe", "couldn't breathe", "could not breathe", "suffocating", "gasping", "struggling to breathe", "short of breath", "smothered"],
+    p: "Trouble breathing in a dream is usually read as pressure — too much happening with too little room.",
+    t: "A common reading in dream lore connects it to feeling hemmed in by circumstances or by other people's expectations. It is frequently described alongside dreams of being trapped or buried. The image is read as a signal about load, not about health.",
+    q: "What is currently taking up more room than you have to give?" },
+
+  { id: "naked", n: "Naked in public", g: "Body & self",
+    k: ["naked", "nude", "nudity", "no clothes", "undressed", "without clothes", "missing my clothes", "lost my clothes", "everyone saw me"],
+    p: "Being naked in public is usually read as exposure — the fear of being seen as you actually are.",
+    t: "This is one of the best-known anxiety dreams. The common reading is that the dreamer is worried about being judged on something that cannot be covered up. A frequently noted detail is that in most versions of this dream, nobody else in the dream reacts much at all.",
+    q: "What would people see if you stopped managing how you come across?" },
+
+  { id: "teeth", n: "Teeth falling out", g: "Body & self",
+    k: ["teeth", "tooth", "losing teeth", "loose tooth", "crumbling teeth", "molar", "my tooth", "lost a tooth", "teeth fell", "teeth crumbling"],
+    p: "Teeth falling out is one of the most reported dreams there is, and it is usually read as worry about how you come across, or about losing something that cannot be replaced.",
+    t: "Dream lore offers several readings here and does not settle on one. The oldest is loss — of youth, of a person, of a version of yourself. A second common reading treats teeth as speech, so losing them becomes worry about being heard or about saying the wrong thing. Freudian readings connect it to anxiety about the body.",
+    q: "Is the thing your dream was losing something you are afraid to lose while awake?" },
+
+  { id: "hair", n: "Hair", g: "Body & self",
+    k: ["hair", "haircut", "cutting my hair", "cut my hair", "bald", "losing my hair", "shaved", "shaving my head", "braid", "ponytail"],
+    p: "Hair in dreams is usually about identity, or about how much of yourself you show other people.",
+    t: "Cutting hair is often read in dream lore as a deliberate change of self-image, and losing it as the same change happening without permission. Both are described as transitions rather than losses. What the dreamer felt about the result is usually treated as the part that matters.",
+    q: "Did the change to your hair in the dream feel like your own choice?" },
+
+  { id: "blood", n: "Blood", g: "Body & self",
+    k: ["blood", "bleeding", "bled", "bloody", "bloodstain"],
+    p: "Blood is usually read as life force, and it tends to appear alongside something that feels like a serious cost.",
+    t: "A common reading links blood to energy spent or affection given. In older folk tradition, blood in a dream was read as a sign of strong feeling rather than of harm. Modern readings generally treat it as a signal that something has been draining for a while.",
+    q: "Where do you feel you are giving more than you are getting back?" },
+
+  { id: "crying", n: "Crying", g: "Body & self",
+    k: ["crying", "cried", "cry", "tears", "weeping", "sobbing", "tearful", "in tears"],
+    p: "Crying in a dream is usually read as release — feelings that have been waiting for a way out.",
+    t: "Dream lore commonly treats dream crying as a milder, needed version of the waking kind. Crying in a dream and waking up fine is often described as processing rather than distress. Crying that will not finish is usually read as feeling still being held back.",
+    q: "Was the crying in the dream a relief, or did it feel like it could not finish?" },
+
+  { id: "injury", n: "Being hurt or injured", g: "Body & self",
+    k: ["hurt", "injured", "injury", "wound", "wounded", "broken leg", "broken arm", "bruise", "bruised", "sprained"],
+    p: "Injury in a dream is usually read as a hurt that has already happened, or one you are braced for.",
+    t: "A common reading treats dream injuries as emotional rather than physical. Where the injury sits is often described as pointing at what kind of hurt it is — legs and feet for direction, hands for work, the chest for feeling. The dream usually gives more attention to being injured than to the wound itself.",
+    q: "Is there a hurt you have been treating as already healed?" },
+
+  { id: "scream", n: "Screaming with no voice", g: "Body & self",
+    k: ["screaming", "screamed", "scream", "screams", "no voice", "lost my voice", "couldn't speak", "could not speak", "mute", "nothing came out"],
+    p: "Screaming without a sound is usually read as feeling unheard by the people who need to hear you.",
+    t: "Dream lore often pairs this image with choking and with being trapped, reading all three as a loss of agency. The common thread is that the dreamer is trying to raise a signal and nothing arrives at the other end. It is frequently reported after a stretch of not being listened to.",
+    q: "Who would you most want to hear you right now?" },
+
+  { id: "sick", n: "Being sick", g: "Body & self",
+    k: ["vomiting", "vomited", "throwing up", "threw up", "nausea", "nauseous", "sick to my stomach", "illness", "fever", "sick in bed", "food poisoning"],
+    p: "Being sick in a dream is usually read as something you have taken in that no longer agrees with you.",
+    t: "A common reading treats it as rejection — a situation, a commitment, or a feeling the dreamer wants out of their system. Illness in dreams is generally read as strain rather than as anything about the body. Recovery inside the dream, when it happens, is often treated as the more telling part.",
+    q: "What have you taken on lately that you would rather not still be carrying?" },
+
+  { id: "eyes", n: "Eyes & sight", g: "Body & self",
+    k: ["blind", "blindness", "can't open my eyes", "couldn't open my eyes", "blurry vision", "lost my sight", "eyes closed", "couldn't see", "could not see"],
+    p: "Losing sight in a dream is usually read as not wanting to look at something, rather than not being able to.",
+    t: "A common reading treats closed or failing eyes as the dreamer's own refusal to see. Darkness with the eyes open is read as uncertainty instead. In Jungian terms, the image is often described as the mind drawing a curtain while it works something out.",
+    q: "What have you been keeping just out of view lately?" },
+
+  { id: "snake", n: "Snake", g: "Animals",
+    k: ["snake", "snakes", "serpent", "serpents", "python", "cobra", "viper", "rattlesnake", "venom", "shedding skin"],
+    p: "Snakes are usually read as something powerful and easily overlooked — often a feeling, a truth, or a change that is already underway.",
+    t: "In dream lore the snake carries two readings and both are common. One is danger, drawn from the snake's long association with what people want to avoid. The other is transformation, because a snake sheds its skin; this reading is especially common in Jungian writing, where the snake is treated as a symbol of deep change that happens on its own schedule.",
+    q: "Did the snake in your dream frighten you, or leave you curious?" },
+
+  { id: "cat", n: "Cat", g: "Animals",
+    k: ["cat", "cats", "kitten", "kittens", "feline", "tabby", "purring"],
+    p: "Cats are usually read as independence and instinct — the parts of you that do not take instructions.",
+    t: "Folk tradition treats cats as household presences whose meaning is personal rather than fixed, which is why readings tend to be individual. A common modern reading links them to intuition and to boundaries. A cat that comes to you and a cat that avoids you are usually read differently.",
+    q: "Is there something you have been letting come to you on its own terms?" },
+
+  { id: "dog", n: "Dog", g: "Animals",
+    k: ["dog", "dogs", "puppy", "puppies", "pup", "hound", "barking"],
+    p: "Dogs are usually read as loyalty, friendship, and the instinct to guard something.",
+    t: "Dream lore generally reads a friendly dog as trust, and an attacking dog as trust that has been broken or as tension with someone close. Guarding is the other common thread: a dog at a door is often read as something being protected. The dog's mood usually carries more weight in the reading than its breed.",
+    q: "Who or what are you guarding right now?" },
+
+  { id: "birds", n: "Birds", g: "Animals",
+    k: ["bird", "birds", "crow", "crows", "raven", "owl", "eagle", "dove", "pigeon", "sparrow", "feather", "feathers", "flock", "seagull", "singing bird"],
+    p: "Birds are usually read as thought, news, or messages — something arriving from a distance.",
+    t: "A common reading in dream lore treats birds as messengers, with the kind of bird setting the tone: doves for peace, crows for warning, owls for something seen in the dark. Feathers are usually read as a trace left behind by something that has already moved on.",
+    q: "What news have you been waiting for without admitting that you are waiting?" },
+
+  { id: "spiders", n: "Spiders & insects", g: "Animals",
+    k: ["spider", "spiders", "spiderweb", "tarantula", "insect", "insects", "bug", "bugs", "ants", "roach", "cockroach", "swarm", "crawling bugs"],
+    p: "Spiders and insects are usually read as small worries that have multiplied, rather than one large problem.",
+    t: "Dream lore commonly reads a spider's web as a situation that was set up before you arrived. Insects are usually read as the ordinary, irritating kind of stress — many small things rather than one big one. Scale is the detail readers tend to fix on: one creature or a great many.",
+    q: "Is there one thing you could deal with more easily than the pile of small things around it?" },
+
+  { id: "fish", n: "Fish", g: "Animals",
+    k: ["fish", "fishes", "goldfish", "shark", "whale", "dolphin", "salmon", "trout", "aquarium", "school of fish"],
+    p: "Fish are usually read as ideas or feelings that live just under the surface of your attention.",
+    t: "A common reading links fish to the contents of deep water, which in dream lore means things you sense but have not named. Catching a fish is usually read as an insight arriving; losing one as the same insight slipping away. A shark carries a sharper version of the reading, with some dread attached.",
+    q: "What have you been circling for a while without catching?" },
+
+  { id: "horse", n: "Horse", g: "Animals",
+    k: ["horse", "horses", "pony", "stallion", "riding", "gallop", "galloping", "mare", "saddle"],
+    p: "Horses are usually read as drive and bodily energy — how much power you have, and who is steering it.",
+    t: "Dream lore often treats a horse as the dreamer's own momentum. Riding is usually read as being in charge of it; being carried is read as the momentum going its own way. An unbroken or rearing horse is commonly described as energy that has plenty of force and no direction yet.",
+    q: "Who is setting the pace at the moment — you, or the momentum?" },
+
+  { id: "predator", n: "Wolves & big predators", g: "Animals",
+    k: ["wolf", "wolves", "bear", "bears", "lion", "tiger", "panther", "coyote", "wild animal", "beast", "predator", "growling"],
+    p: "Large predators are usually read as a threat that feels bigger and more instinctive than the day-to-day kind.",
+    t: "A common reading treats the predator as something in the dreamer's own life that commands respect rather than something evil. Being watched by one is usually read as pressure that has not yet acted. A predator that never attacks is frequently read as strength the dreamer has not claimed.",
+    q: "Is there a situation you are treating as more dangerous than it has actually turned out to be?" },
+
+  { id: "baby", n: "Babies & children", g: "People & relationships",
+    k: ["baby", "babies", "infant", "child", "children", "kid", "kids", "toddler", "newborn", "little girl", "little boy", "my son", "my daughter"],
+    p: "Babies and children are usually read as something new and unfinished that needs looking after.",
+    t: "In dream lore a baby generally stands for a new project, a new feeling, or a new version of the dreamer, rather than for an actual baby. The common reading is that the dreamer's attention is being asked for. Jungian writers often describe the child figure as the part of a person that still wants to grow.",
+    q: "What have you started recently that needs more attention than you have given it?" },
+
+  { id: "pregnancy", n: "Pregnancy & birth", g: "People & relationships",
+    k: ["pregnant", "pregnancy", "giving birth", "gave birth", "childbirth", "in labor", "expecting a baby", "due date"],
+    p: "Pregnancy in a dream is usually read as something being prepared, not something already finished.",
+    t: "The common reading is gestation: a project, a decision, or a change that is developing out of sight. It is read as a state of waiting rather than as a statement about the dreamer's body. Birth in a dream is generally treated as the moment the waiting ends.",
+    q: "What in your life is still forming and not ready to be spoken about yet?" },
+
+  { id: "stranger", n: "A stranger", g: "People & relationships",
+    k: ["stranger", "strangers", "unknown man", "unknown woman", "masked", "masked figure", "shadowy figure", "hooded", "didn't know who", "no face"],
+    p: "A stranger is usually read as a part of you that you have not met yet, or as a situation you cannot read.",
+    t: "In Jungian terms an unknown figure is often described as something in the dreamer's own character that has not been given a place. Dream lore also reads strangers as plain uncertainty: a person or situation whose reactions cannot be predicted. Whether the stranger was friendly usually decides which reading fits better.",
+    q: "Did the stranger in your dream seem to want something from you?" },
+
+  { id: "death", n: "Death & funerals", g: "People & relationships",
+    k: ["died", "dying", "death", "dead", "funeral", "funerals", "grave", "graveyard", "cemetery", "coffin", "buried", "burial", "ghost", "ghosts", "widow"],
+    p: "Death in a dream is almost never read as a prediction; it is usually read as an ending that has already happened somewhere in your life.",
+    t: "This is one of the few images dream lore is close to unanimous about. The common reading is an ending: a chapter, a role, or a version of the dreamer that is finished. Seeing someone who has died is usually read more warmly, as unfinished business or as a memory that is still present rather than as a message.",
+    q: "What has already ended that you have not quite let be over?" },
+
+  { id: "wedding", n: "Weddings & marriage", g: "People & relationships",
+    k: ["wedding", "weddings", "married", "marrying", "marriage", "bride", "groom", "aisle", "engagement", "engaged", "proposal", "vows"],
+    p: "Weddings are usually read as a commitment, and not necessarily a romantic one.",
+    t: "A common reading treats the wedding as a promise the dreamer is making or considering — to a person, a job, a place, or a version of themselves. Dream lore often notes that the dreamer's nerves matter more to the reading than the ceremony. Marrying someone you barely know is commonly read as a commitment whose terms are not clear yet.",
+    q: "What are you being asked to commit to at the moment, and how do the terms sit with you?" },
+
+  { id: "arguing", n: "Arguing & fighting", g: "People & relationships",
+    k: ["argument", "arguments", "arguing", "argued", "fight", "fights", "fighting", "fought", "shouting", "shouted", "yelling", "yelled", "quarrel", "confrontation", "slammed the door"],
+    p: "Conflict in a dream is usually read as something unspoken between you and the other person, or between two parts of yourself.",
+    t: "A common reading is that the argument in the dream is the one that did not happen while awake. Dream lore often notes that the dreamer's role matters: being accused, being attacked, and being the one who escalates all point in different directions. Fighting a figure you cannot identify is usually read as an internal conflict.",
+    q: "Who did the person in the dream remind you of, even if it was not them?" },
+
+  { id: "crowds", n: "Crowds", g: "People & relationships",
+    k: ["crowd", "crowds", "crowded", "mob", "audience", "everyone was watching", "all eyes on me", "packed room", "strangers everywhere"],
+    p: "Crowds are usually read as the pressure of other people's expectations.",
+    t: "A common reading links the crowd to feeling judged, watched, or simply outnumbered. Dream lore often treats a faceless crowd differently from a crowd of known faces, reading the first as general pressure and the second as specific relationships. Being lost in a crowd is a milder variation of the same image.",
+    q: "Whose attention do you feel you are performing for?" },
+
+  { id: "past", n: "Someone from your past", g: "People & relationships",
+    k: ["old friend", "childhood friend", "ex-boyfriend", "ex-girlfriend", "ex-wife", "ex-husband", "my ex", "classmate", "someone from the past", "former colleague", "old flame"],
+    p: "Someone from your past is usually read as an unfinished feeling rather than as a message from them.",
+    t: "The common reading is unfinished business: something that ended before it was resolved. Dream lore generally treats the appearance of a past figure as a signal about the dreamer's present situation rather than about the other person. The feeling you had on seeing them is usually considered the most useful detail.",
+    q: "What was still unresolved when that chapter closed?" },
+
+  { id: "authority", n: "An authority figure", g: "People & relationships",
+    k: ["boss", "my boss", "police", "police officer", "policeman", "officer", "principal", "professor", "soldier", "arrested", "arrest", "courtroom", "judge", "manager", "headmaster"],
+    p: "Authority figures are usually read as the standards you answer to, whether or not anyone is actually watching.",
+    t: "A common reading treats the boss, judge, or officer as an internal rule rather than a real person. Being questioned or arrested is usually read as feeling judged against a standard the dreamer has accepted. In Jungian terms this figure is often described as the dreamer's own inner authority, wearing whatever uniform the dream gives it.",
+    q: "Whose standards were you measuring yourself against in the dream?" },
+
+  { id: "parent", n: "A parent", g: "People & relationships",
+    k: ["mother", "father", "mom", "mum", "mama", "dad", "papa", "parents", "my mother", "my father", "my mum", "my dad", "stepmother", "stepfather", "mother-in-law", "father-in-law"],
+    p: "A parent in a dream is usually read as the oldest standard you carry, whoever else the dream puts around them.",
+    t: "A common reading treats the parent as the figure who set what 'good' and 'allowed' meant before you had words for either. Dream lore often notes that the parent appears at the age you remember them rather than the age they are now, and that this detail usually matters more than the setting. A parent who is gone is generally read as the relationship still being present rather than as a message from anywhere.",
+    q: "What did that parent want from you in the dream, and is it still what you are measuring yourself against?" },
+
+  { id: "partner", n: "A partner", g: "People & relationships",
+    k: ["wife", "husband", "girlfriend", "boyfriend", "partner", "fiance", "fiancee", "my wife", "my husband", "ex-wife", "ex-husband", "spouse", "significant other"],
+    p: "A partner in a dream is usually read as the closest mirror you have — the person who sees the version of you that other people do not.",
+    t: "A common reading treats the partner as the relationship itself rather than as the individual: what the dream does to the two of you tends to be read as what is happening between you. Dream lore often reads distance, silence, or a partner who will not answer as a gap the dreamer is already aware of, not as news. The same figure being affectionate is given the opposite reading in the same tradition.",
+    q: "In the dream, what was unsaid between you, and is it unsaid in the daytime too?" },
+
+  { id: "friend", n: "A friend", g: "People & relationships",
+    k: ["friend", "friends", "best friend", "childhood friend", "group of friends", "my friends", "roommate", "housemate", "neighbor"],
+    p: "A friend in a dream is usually read as a part of your own life that the friendship stands for, not as a report about them.",
+    t: "A common reading treats the friend as company you have chosen rather than been given, which is why dreams of losing one or being left by one usually carry more feeling than the scene suggests. Dream lore often reads a friend who has changed, or who will not recognize you, as a change in the dreamer rather than in the friend. Laughing together is generally given a warm reading.",
+    q: "What was different about that friend in the dream, and where else have you noticed that difference?" },
+
+  { id: "house", n: "Houses & homes", g: "Places & buildings",
+    k: ["house", "houses", "home", "homes", "my house", "childhood home", "apartment", "flat", "building", "cottage", "old house"],
+    p: "A house is usually read as the dreamer's own life, with each room standing for a different part of it.",
+    t: "This is one of the most consistent readings in dream lore. The state of the house is generally treated as the state of the dreamer: tidy or neglected, lived-in or empty, familiar or oddly rearranged. Rooms the dreamer has never noticed before are usually read as parts of the self that have been overlooked.",
+    q: "Which room did you spend the most time in, and which one did you avoid?" },
+
+  { id: "rooms", n: "Hidden & unfamiliar rooms", g: "Places & buildings",
+    k: ["room", "rooms", "bedroom", "living room", "spare room", "extra room", "hidden room", "secret room", "corridor", "corridors", "hallway", "hallways", "attic", "basement", "cellar", "stairwell"],
+    p: "An unfamiliar room in a familiar house is usually read as something in your own life you had not noticed was there.",
+    t: "A common reading treats a new room as new capacity — a resource or feeling that was available all along and unused. Hidden or locked rooms are generally read as material the dreamer is not ready to open. Dream lore often notes that the discovered room turns out to be less frightening than the dreamer expected.",
+    q: "What have you found out about yourself lately that you did not know was there?" },
+
+  { id: "doors", n: "Doors", g: "Places & buildings",
+    k: ["door", "doors", "doorway", "locked door", "open door", "knocking", "knock", "doorbell", "threshold", "unlocked"],
+    p: "Doors are usually read as choice and transition — the moment before you decide something.",
+    t: "A common reading in dream lore treats an open door as an invitation and a locked one as a limit that has been set. Knocking is usually described as something asking to be let in, which is often read as a feeling or a part of the dreamer that has been ignored. Whose hand is on the handle is usually the detail that carries the reading.",
+    q: "Was the door in your dream closed by someone else, or by you?" },
+
+  { id: "mirrors", n: "Mirrors", g: "Places & buildings",
+    k: ["mirror", "mirrors", "my reflection", "reflection", "looking at myself", "looking in the mirror", "mirrored"],
+    p: "Mirrors are usually read as honesty about identity — how you see yourself, not how you are seen.",
+    t: "A common reading treats the dream mirror as the dreamer's self-image. A reflection that is wrong, older, or not yours is usually read as a gap between how you appear and how you feel. Dream lore generally treats the mirror as a neutral surface that only shows what is already there.",
+    q: "Did the person in the mirror look the way you feel?" },
+
+  { id: "windows", n: "Windows", g: "Places & buildings",
+    k: ["window", "windows", "windowsill", "pane", "looking out the window", "view from the window"],
+    p: "Windows are usually read as perspective — seeing something without being part of it.",
+    t: "A common reading links windows to hope, or to watching from the outside. Looking out and seeing something you cannot reach is usually read as desire at a distance. A window that stands open is often treated as an option the dreamer has not taken yet.",
+    q: "What were you looking at through the window, and could you have gone out?" },
+
+  { id: "stairs", n: "Stairs", g: "Places & buildings",
+    k: ["stairs", "staircase", "stairway", "steps", "spiral staircase", "climbing the stairs", "going upstairs", "going downstairs"],
+    p: "Stairs are usually read as progress, with the direction telling you which way it is going.",
+    t: "Going up is commonly read in dream lore as effort and improvement, going down as moving toward something older or deeper. Broken or endless stairs are usually read as progress that does not behave the way it should. Where the stairs lead is often treated as more important than how many there are.",
+    q: "Were you going up or down, and which direction feels closer to your life right now?" },
+
+  { id: "elevator", n: "Elevators", g: "Places & buildings",
+    k: ["elevator", "elevators", "lift", "escalator", "elevator shaft", "pressing the button"],
+    p: "Elevators are usually read as control over your own progress — being carried rather than climbing.",
+    t: "A common reading treats the elevator as advancement that happens without effort on the dreamer's part. An elevator that drops or jams is generally read as fear about progress going wrong in a way nobody can stop. Dream lore often notes the discomfort of sharing a small space with someone you cannot get away from.",
+    q: "Did the elevator in your dream go where you wanted it to?" },
+
+  { id: "bridge", n: "Bridges", g: "Places & buildings",
+    k: ["bridge", "bridges", "crossing the bridge", "footbridge", "suspension bridge", "crossed the bridge"],
+    p: "Bridges are usually read as the crossing from one part of your life to another.",
+    t: "A common reading treats the bridge as a transition that is already underway, not one still being considered. Bridges that are broken or missing planks are generally read as a transition that does not feel safe. Looking down from a bridge is often noted, because it usually means the dreamer is watching the change rather than making it.",
+    q: "What is on the far side of the bridge, and are you ready for it?" },
+
+  { id: "tunnel", n: "Tunnels & caves", g: "Places & buildings",
+    k: ["tunnel", "tunnels", "cave", "caves", "cavern", "underground", "grotto", "burrow"],
+    p: "Tunnels and caves are usually read as a stretch of going through something, with the exit being the point.",
+    t: "A common reading links the tunnel to a difficult passage that has a far end by definition. Caves are more often read as retreat — shelter taken deliberately rather than hardship suffered. Dream lore generally treats the direction of travel as the useful detail in both cases.",
+    q: "In the dream, were you heading deeper in or working your way out?" },
+
+  { id: "school", n: "Schools & classrooms", g: "Places & buildings",
+    k: ["school", "schools", "classroom", "college", "university", "campus", "lecture", "homeroom", "recess", "teacher", "homework"],
+    p: "Schools are usually read as being measured — a place where you are graded, not just present.",
+    t: "A common reading treats the school as the dreamer's sense of being evaluated, often carried over from years ago rather than from present circumstances. Returning to school as an adult is generally read as unfinished business or as a stretch of learning. Dream lore often links the classroom directly to exam dreams.",
+    q: "What are you currently being measured against, and by whom?" },
+
+  { id: "sacred", n: "Churches & sacred places", g: "Places & buildings",
+    k: ["church", "chapel", "cathedral", "temple", "mosque", "synagogue", "altar", "praying", "prayer", "stained glass", "shrine", "confessional"],
+    p: "Sacred places are usually read as a search for meaning, or as a need for quiet.",
+    t: "Dream lore generally treats these settings as places of reckoning rather than as statements about religion. A common reading is that the dreamer is looking for permission, or for a way to name what matters to them. In Jungian terms such places are often described as where a person meets the part of themselves they usually keep out of the way.",
+    q: "What were you looking for in that place?" },
+
+  { id: "garden", n: "Gardens, forests & growing things", g: "Places & buildings",
+    k: ["garden", "gardens", "forest", "woods", "meadow", "field", "countryside", "jungle", "orchard", "trees", "vegetable patch"],
+    p: "Growing places are usually read as the state of what you are cultivating — relationships, work, or yourself.",
+    t: "A common reading treats a tended garden as care that has been given, and a wild forest as growth that happened without supervision. Dream lore usually reads the forest as a place where direction is lost but something else is found. Seasonal details are often treated as clues about timing.",
+    q: "Was the place in your dream tended, or did it grow on its own?" },
+
+  { id: "roads", n: "Roads & journeys", g: "Places & buildings",
+    k: ["road", "roads", "journey", "trip", "traveling", "highway", "path", "trail", "crossroads", "destination", "road trip"],
+    p: "Roads are usually read as where a life is heading rather than how it is going right now.",
+    t: "A common reading links a road to direction and a crossroads to a decision that has not been made. A road that simply keeps going is generally read as time rather than as a goal. Dream lore often notes the dreamer's speed, since it tends to mirror how much say they feel they have.",
+    q: "Did the road in your dream have a destination, or were you just moving?" },
+
+  { id: "keys", n: "Keys", g: "Objects & tools",
+    k: ["key", "keys", "keyhole", "unlocking", "locked out", "padlock", "keychain", "key ring", "lost key"],
+    p: "Keys are usually read as access — the thing that gets you through a door you have been standing in front of.",
+    t: "A common reading treats a key as a solution that already exists and has not been used yet. Losing keys is generally read as losing access to something that was counted on. Finding a key is more often read as an option appearing than as plain luck.",
+    q: "Is there a door you already have the key to and have not opened?" },
+
+  { id: "money", n: "Money", g: "Objects & tools",
+    k: ["money", "cash", "coins", "coin", "wallet", "banknotes", "dollars", "gold", "treasure", "rich", "wealth", "paycheck", "paying", "paid", "lottery"],
+    p: "Money is usually read as value and security — how much room you feel you have, not how much you actually have.",
+    t: "A common reading links dream money to a sense of worth or of safety. Finding money is usually read as a resource the dreamer had forgotten about; losing it as worry about stability. Dream lore generally treats the amount as less telling than the dreamer's feelings about it.",
+    q: "Where do you feel you have less room than you need?" },
+
+  { id: "phone", n: "Phones", g: "Objects & tools",
+    k: ["phone", "phones", "phone call", "cell phone", "mobile", "telephone", "texting", "text message", "dialed", "calling", "voicemail", "messages", "ringing phone"],
+    p: "Phones are usually read as connection, and the way it fails is the part worth noticing.",
+    t: "A common reading treats the phone as the dreamer's link to people they cannot see. A ringing phone is usually read as something asking for attention; a silent one as a feeling of being out of touch. Whether the dreamer answers is often treated as the dreamer's own choice being shown back to them.",
+    q: "Who would you call if you knew they would pick up?" },
+
+  { id: "callfail", n: "A call that will not connect", g: "Objects & tools",
+    k: ["can't call", "couldn't call", "could not call", "no signal", "dead battery", "phone died", "can't reach", "couldn't get through", "busy signal", "wrong number", "no service", "phone wouldn't", "couldn't dial", "call wouldn't go through", "out of range"],
+    p: "A call that will not connect is usually read as wanting contact that is not available to you.",
+    t: "This is a commonly reported frustration dream, and readings usually focus on the gap rather than on the phone. A common interpretation is that the dreamer has something to say and cannot find the right recipient. Dream lore generally reads the failure of the device as a stand-in for distance in the relationship.",
+    q: "Who is difficult to reach these days, and what would you say if you got through?" },
+
+  { id: "clothes", n: "Clothes", g: "Objects & tools",
+    k: ["clothes", "clothing", "dress", "shirt", "wardrobe", "closet", "uniform", "outfit", "coat", "changing clothes", "getting dressed", "dressed up"],
+    p: "Clothes are usually read as how you present yourself, and how much of the truth they cover.",
+    t: "A common reading treats the outfit as a role rather than a preference. Wearing the wrong clothes is generally read as being in a situation that does not fit, which is a milder version of the naked-in-public dream. Dream lore often notes how much effort getting dressed takes in a dream, since it usually mirrors the effort of keeping up an appearance.",
+    q: "Which version of yourself were you dressed as in the dream?" },
+
+  { id: "shoes", n: "Shoes & bare feet", g: "Objects & tools",
+    k: ["shoes", "shoe", "barefoot", "boots", "sandals", "sneakers", "lost a shoe", "missing shoe", "bare feet", "broken heel"],
+    p: "Shoes are usually read as footing — how well equipped you feel for the ground you are standing on.",
+    t: "A common reading links shoes to the practical side of a journey. Losing a shoe is often read as losing ground or preparation; walking barefoot is usually read as being exposed but grounded. Dream lore generally treats the discomfort in the dream as the signal rather than the style of shoe.",
+    q: "Are you equipped for where you are currently standing?" },
+
+  { id: "clocks", n: "Clocks & watches", g: "Objects & tools",
+    k: ["clock", "clocks", "wristwatch", "wrist watch", "ticking", "alarm clock", "stopped clock", "running out of time", "hourglass", "midnight", "deadline", "timer", "five minutes left"],
+    p: "Clocks are usually read as pressure about time — too little of it, or time that has stopped moving.",
+    t: "A common reading treats the clock as a measure the dreamer feels judged by. A stopped clock is often read as time that has stopped mattering rather than as a warning. In dream lore, running out of time and running late are closely related images, the first more about the deadline and the second more about the journey.",
+    q: "What deadline are you carrying that nobody actually set for you?" },
+
+  { id: "books", n: "Books & writing", g: "Objects & tools",
+    k: ["book", "books", "library", "reading", "writing", "notebook", "letter", "letters", "journal", "diary", "pages", "manuscript", "handwriting"],
+    p: "Books and writing are usually read as recorded knowledge — something you are meant to learn or to say.",
+    t: "A common reading treats an unread book as something the dreamer already knows and has not looked at. Writing in a dream is usually read as the wish to be understood rather than as a message from anywhere. Dream lore generally reads libraries as accumulated experience, which is why they can feel heavy as well as helpful.",
+    q: "What is the one thing you have been meaning to write down?" },
+
+  { id: "fire", n: "Fire", g: "Objects & tools",
+    k: ["fire", "fires", "burning", "burned", "burnt", "flames", "flame", "smoke", "wildfire", "explosion", "exploded", "blaze", "on fire"],
+    p: "Fire is usually read as intensity — strong feeling, momentum, or something that has gotten out of control.",
+    t: "Dream lore uses fire for both destruction and renewal, and the reading usually depends on whether the dreamer was near it or in charge of it. A controlled fire is commonly read as energy well used; a spreading one as feeling that has escaped its box. Being unharmed by fire is given a notably warmer reading in the same tradition.",
+    q: "Is there something in your life with more heat in it than you have been willing to name?" },
+
+  { id: "bags", n: "Bags & luggage", g: "Objects & tools",
+    k: ["bag", "bags", "backpack", "suitcase", "luggage", "packing", "unpacking", "purse", "briefcase", "carry-on"],
+    p: "Bags are usually read as what you are carrying — and sometimes as what you are choosing not to put down.",
+    t: "A common reading treats packing as preparing for a change and unpacking as settling into one. Losing a bag is often read as losing track of something that matters. Dream lore generally reads a heavy bag as a load that has been accepted rather than one that was necessary.",
+    q: "What are you still carrying that you could set down?" },
+
+  { id: "rings", n: "Rings & jewelry", g: "Objects & tools",
+    k: ["wedding ring", "engagement ring", "jewelry", "necklace", "bracelet", "diamond", "earrings", "ruby", "gem", "gems", "rings", "heirloom"],
+    p: "Jewelry is usually read as value and promise — something given, kept, or expected.",
+    t: "A common reading treats a ring as a promise that has already been made, which is why losing one in a dream tends to carry more feeling than the object seems to deserve. Jewelry is generally read as worth in both senses: money, and being prized. Who gave it in the dream is often the telling detail.",
+    q: "What does that promise mean to you now, and who made it?" },
+
+  { id: "food", n: "Food & eating", g: "Objects & tools",
+    k: ["food", "eating", "ate", "meal", "meals", "dinner", "lunch", "breakfast", "cooking", "cooked", "hungry", "starving", "feast", "restaurant", "kitchen table"],
+    p: "Food is usually read as what you are taking in — not only meals, but attention, affection, or information.",
+    t: "A common reading treats eating as receiving and cooking as providing. Eating alone and eating with others are usually read differently in the same tradition. An empty fridge or an empty table is generally read as a shortfall the dreamer has been managing quietly.",
+    q: "What have you been taking in lately that you would not have chosen?" },
+
+  { id: "cars", n: "Cars & driving", g: "Objects & tools",
+    k: ["car", "cars", "driving", "drove", "driven", "steering wheel", "brakes", "brake", "truck", "vehicle", "backseat", "passenger seat", "traffic", "crash", "crashed", "flat tire", "no brakes"],
+    p: "Cars are usually read as control over how your life is moving — who is driving, and how much of the road you can see.",
+    t: "A common reading in dream lore treats the car as the dreamer's own progress. Being in the passenger seat is usually read as having less say than you would like; brakes that do not work are read as fear that something cannot be stopped. Crash dreams are generally read as anxiety about direction rather than as warnings about the road.",
+    q: "Who was driving in the dream, and who is driving the same thing now?" },
+
+  { id: "transit", n: "Trains, planes & boats", g: "Objects & tools",
+    k: ["train", "trains", "railway", "subway", "metro", "platform", "station", "airplane", "plane", "airport", "flight", "boarding", "pilot", "runway", "boat", "boats", "ship", "sailing", "ferry", "canoe", "deck", "cruise"],
+    p: "Trains, planes and boats are usually read as journeys you are on but not steering — the direction is set by someone else.",
+    t: "A common reading treats these as shared travel: you choose the destination and someone else does the driving. Dream lore often reads the departure as the decision and the journey as the stretch of time that follows it. Missing the departure shows up so regularly in this tradition that it is usually treated as its own separate image.",
+    q: "Were you on the way somewhere in the dream, or waiting to leave?" },
+
+  { id: "exam", n: "Exams & tests", g: "Events & action",
+    k: ["exam", "exams", "test", "tests", "quiz", "final exam", "taking an exam", "studying for", "took a test", "didn't study", "studied", "study", "grade", "grades", "report card", "no idea what the answers"],
+    p: "Exam dreams are usually read as being measured on something you feel unprepared for.",
+    t: "This is one of the most common recurring dreams among adults, and it is usually read as pressure rather than as a memory of school. A frequently reported version is arriving unprepared for a test in a subject finished years ago, which is generally read as an old standard still running in the background. Dream lore treats the exam as a stand-in for any situation where you might be judged.",
+    q: "What in your life currently feels like being handed a paper you did not study for?" },
+
+  { id: "work", n: "Work & the office", g: "Events & action",
+    k: ["work", "working", "job", "jobs", "office", "meeting", "meetings", "deadline", "emails", "email", "boss called", "coworker", "colleague", "shift", "my desk", "presentation", "interview", "fired", "quit my job", "unemployed"],
+    p: "Work in a dream is usually read as the place where you are measured, whether or not the dream is about your actual job.",
+    t: "A common reading treats the office as the setting for being evaluated rather than as a report about employment. Dream lore often reads a job you no longer have — or one you have never had — as the feeling of being assessed carrying over from somewhere else. Being unprepared at work, or watched while you work, is generally read the same way as an exam dream.",
+    q: "Who is grading the work in the dream, and does anyone grade it that way in the daytime?" },
+
+  { id: "searching", n: "Losing & searching", g: "Events & action",
+    k: ["searching", "searched", "search", "looking for", "couldn't find", "could not find", "can't find", "lost my", "misplaced", "hunting for", "rooting through", "can't remember where", "where did I put"],
+    p: "Searching is usually read as looking for something you have already decided you need.",
+    t: "A common reading treats the missing object as a stand-in for whatever the dreamer is actually missing. Losing something is generally read as worry about losing track rather than as a real absence. Dream lore often notes that the searcher rarely finds the object before waking up.",
+    q: "What is the thing you keep checking is still there?" },
+
+  { id: "bathroom", n: "A bathroom you cannot find", g: "Events & action",
+    k: ["toilet", "bathroom", "restroom", "washroom", "no toilet", "can't find a bathroom", "lost the bathroom", "public restroom", "loo", "locked bathroom"],
+    p: "Looking for a bathroom is usually read as a basic need that has been postponed.",
+    t: "This is a well-known anxiety dream, and it is usually read as the dreamer taking care of everyone's needs except their own. The common reading is not about the room but about permission to stop. It is frequently reported during stretches of overwork.",
+    q: "What have you been putting off because someone else needed something first?" },
+
+  { id: "missed", n: "Missing a flight or train", g: "Events & action",
+    k: ["missed the flight", "missed my flight", "missed the train", "missed my train", "missed the bus", "missed the boat", "missed the plane", "missed my connection", "missed it", "missed the last train"],
+    p: "Missing a departure is usually read as a fear of a window closing, not as a warning about travel.",
+    t: "A common reading treats the missed departure as an opportunity the dreamer believes is already leaving. Dream lore usually reads the way it was missed — running, forgetting, being held up — as the more useful detail. How the dream ends, whether the dreamer catches up or gives up, is often treated as the telling part.",
+    q: "Is there an opportunity you believe is closing, and what would it mean if it already had?" },
+
+  { id: "heights", n: "Heights & edges", g: "Events & action",
+    k: ["heights", "high up", "cliff", "ledge", "rooftop", "roof", "precipice", "edge of", "dizzy", "vertigo", "looking down", "balcony", "top of the building"],
+    p: "High places are usually read as having something to lose — the higher up you are, the further there is to fall.",
+    t: "A common reading treats the height as status or progress, and the fear as anxiety about not being able to hold it. Dream lore often links this image with falling dreams, with the difference being that in a height dream the dreamer stays put. Looking over an edge is frequently read as weighing a risk rather than taking one.",
+    q: "What do you have more of now than you used to, and does it feel safe up there?" },
+
+  { id: "waking", n: "Unable to wake up", g: "Events & action",
+    k: ["couldn't wake up", "could not wake up", "can't wake up", "false awakening", "kept waking up", "woke up in the dream", "still dreaming", "trapped in the dream"],
+    p: "Dreaming about not being able to wake is usually read as feeling unable to stop something.",
+    t: "A common reading treats this as the dreamer's sense that a situation keeps restarting. It is often described alongside dreams of paralysis and of being trapped. The image is generally read as effort that does not produce any change.",
+    q: "What keeps coming back no matter how much you want it behind you?" },
+
+  { id: "earthquake", n: "Earthquakes & collapse", g: "Events & action",
+    k: ["earthquake", "earthquakes", "ground shaking", "the ground shook", "collapsed", "collapsing", "collapse", "crumbling", "building fell", "everything fell apart", "ground opened up"],
+    p: "An earthquake is usually read as the assumptions underneath you moving all at once.",
+    t: "A common reading links it to a sense that the stable parts of life were less stable than they looked. Collapsing buildings carry the same reading on a smaller scale, usually attached to one area that the dreamer relies on. Dream lore generally treats these dreams as unsettling rather than as forecasts.",
+    q: "What have you assumed is solid, and might you be resting a little too much weight on it?" },
+
+  { id: "darkness", n: "Darkness", g: "Light & dark",
+    k: ["dark", "darkness", "pitch black", "blackout", "unlit", "dim", "couldn't see anything", "in the dark", "no lights"],
+    p: "Darkness is usually read as uncertainty rather than danger — the feeling of moving without information.",
+    t: "A common reading treats the dark as the unknown rather than the bad. In Jungian terms it is often described as the part of the mind that has not been looked at yet. Whether the dreamer kept moving in the dark is usually the detail that carries the reading.",
+    q: "What are you doing in the dark right now that you could bring into the light?" },
+
+  { id: "light", n: "Light & brightness", g: "Light & dark",
+    k: ["light", "lights", "bright light", "glowing", "glow", "sunlight", "radiant", "flash of light", "blinding", "lighthouse", "sunrise", "dawn", "shining"],
+    p: "Bright light is usually read as clarity, or as something becoming impossible to ignore.",
+    t: "A common reading in dream lore treats light as understanding that has arrived. A sudden flash is usually read as a realization, pleasant or otherwise. Light too bright to look at comfortably is generally read as a truth the dreamer is not entirely ready for.",
+    q: "What has recently become clearer than you expected it to be?" }
+];
+/* SYMBOL DICTIONARY — DICT-END */
+
+/* ---------- how each group is described in the summary paragraph ---------- */
+var GROUP_NOTE = {
+  "Water & weather": "feelings, mood, and how much of either you are holding",
+  "Falling & motion": "movement — where you are going, what is following, and how much say you have",
+  "Body & self": "your own body, and how you are holding up",
+  "Animals": "instinct, and the parts of you that do not take instructions",
+  "People & relationships": "other people, and the versions of you that appear around them",
+  "Places & buildings": "settings — where life is happening, and what those places stand for",
+  "Objects & tools": "instruments and possessions — what you use, carry, and rely on",
+  "Events & action": "pressure and performance — being measured, being late, being unable to move",
+  "Light & dark": "how much you can see"
+};
+
+/* =====================================================================
+   MATCHING
+   Token-based, with light inflection tolerance. No stemming library,
+   no network, no model — just a word list and a few suffix rules.
+   ===================================================================== */
+function normalise(text) {
+  return String(text)
+    .toLowerCase()
+    .replace(/[\u2018\u2019\u02bc]/g, "'")
+    .replace(/[^a-z0-9'\s-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+var VARIANT_CACHE = {};
+function variants(word) {
+  if (VARIANT_CACHE[word]) return VARIANT_CACHE[word];
+  var v = [word, word + "s", word + "es", word + "ed", word + "ing", word + "d"];
+  if (word.length > 3 && word.slice(-1) === "y") {
+    v.push(word.slice(0, -1) + "ies", word.slice(0, -1) + "ied");
+  }
+  if (word.length > 3 && word.slice(-1) === "e") {
+    v.push(word.slice(0, -1) + "ing", word.slice(0, -1) + "ed");
+  }
+  var last = word.slice(-1);
+  if (word.length > 3 && /[bdglmnprt]/.test(last) && /[aeiou]/.test(word.slice(-2, -1))) {
+    v.push(word + last + "ing", word + last + "ed");
+  }
+  VARIANT_CACHE[word] = v;
+  return v;
+}
+
+function wordMatches(token, word) {
+  if (NO_INFLECT[word]) return token === word;
+  return variants(word).indexOf(token) !== -1;
+}
+/* Ordinary English words that also happen to be dream symbols. For these the
+   keyword must match exactly: no invented inflections, so "test" no longer
+   catches "testing a machine" and "book" no longer catches "booked a hotel".
+   Plurals that are genuinely wanted are listed explicitly in the entry's k. */
+var NO_INFLECT = {
+  test: 1, book: 1, watch: 1, key: 1, home: 1, light: 1, room: 1,
+  dead: 1, late: 1, water: 1, fire: 1, land: 1, wave: 1
+};
+
+/* Counts how many times a keyword phrase appears in the token list. */
+function countPhrase(tokens, key) {
+  var words = key.split(" ");
+  var hits = 0;
+  var i = 0;
+  while (i <= tokens.length - words.length) {
+    var ok = true;
+    for (var j = 0; j < words.length; j++) {
+      if (!wordMatches(tokens[i + j], words[j])) { ok = false; break; }
+    }
+    if (ok) { hits++; i += words.length; } else { i++; }
+  }
+  return hits;
+}
+
+function analyse(text) {
+  var tokens = normalise(text).split(" ").filter(Boolean);
+  if (!tokens.length) return { tokens: 0, found: [], score: 0 };
+
+  var found = [];
+  for (var i = 0; i < DICT.length; i++) {
+    var entry = DICT[i];
+    var hits = 0;
+    var matched = [];
+    for (var j = 0; j < entry.k.length; j++) {
+      var c = countPhrase(tokens, entry.k[j]);
+      if (c > 0) { hits += c; matched.push(entry.k[j]); }
+    }
+    if (hits > 0) {
+      /* "weak" = 只靠一个日常常用词命中一次（test / home / book 这类）。
+         这种命中可能是真的，也可能只是英文日常用法，交给用户自己判断。 */
+      var weak = matched.length === 1 && NO_INFLECT[matched[0]] === 1 && hits === 1;
+      found.push({ symbol: entry, hits: hits, matched: matched, weak: weak });
+    }
+  }
+
+  found.sort(function (a, b) {
+    if (b.hits !== a.hits) return b.hits - a.hits;
+    return DICT.indexOf(a.symbol) - DICT.indexOf(b.symbol);
+  });
+
+  return { tokens: tokens.length, found: found };
+}
+
+/* =====================================================================
+   WRITING THE RESULT
+   ===================================================================== */
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function formatList(items) {
+  if (items.length === 1) return items[0];
+  if (items.length === 2) return items[0] + " and " + items[1];
+  return items.slice(0, -1).join(", ") + ", and " + items[items.length - 1];
+}
+
+function groupCounts(found) {
+  var order = [];
+  var map = {};
+  for (var i = 0; i < found.length; i++) {
+    var g = found[i].symbol.g;
+    if (!map[g]) { map[g] = 0; order.push(g); }
+    map[g] += 1;
+  }
+  return order
+    .map(function (g) { return [g, map[g]]; })
+    .sort(function (a, b) { return b[1] - a[1]; });
+}
+
+function buildSummary(strong, weakCount, mood) {
+  var n = strong.length;
+  var names = strong.map(function (f) { return f.symbol.n.toLowerCase(); });
+  var out = [];
+
+  if (n === 1) {
+    out.push("Your dream had one thing in it the index knows: " + names[0] + ".");
+    out.push("One symbol on its own is not a reading, so the two entries opening below are the ones that usually turn up next to it — start there.");
+  } else {
+    out.push("Your dream had " + n + " of these in it: " + formatList(names) + ".");
+  }
+  if (weakCount) {
+    out.push("A few more entries may also fit, but each of those matched on a single everyday word — they are folded up below so you can judge for yourself.");
+  }
+  if (mood) {
+    out.push("You said it felt " + mood.toLowerCase() + ". Keep that beside the readings: the same water reads differently to someone who was frightened and someone who was calm, and the dictionary cannot tell those apart on its own.");
+  }
+  out.push("None of this is a prediction and none of it is a diagnosis. The entries say what these symbols have traditionally stood for; what they stand for in your case depends on what you were feeling while you were in the dream, and that part is not in any dictionary.");
+  return out.join(" ");
+}
+
+/* 0 命中时举的例子：从词典里真实存在的条目取，不编 */
+var NO_MATCH_IDS = ["water", "chased", "falling", "teeth", "late", "naked", "doors", "dog"];
+
+function suggestionNames() {
+  var out = [];
+  for (var i = 0; i < NO_MATCH_IDS.length; i++) {
+    for (var j = 0; j < DICT.length; j++) {
+      if (DICT[j].id === NO_MATCH_IDS[i]) { out.push(DICT[j].n.toLowerCase()); break; }
+    }
+  }
+  return out;
+}
+
+/* 单条命中时，从同组里挑两个"常一起出现"的邻居给它作伴 */
+function neighbors(entry, count) {
+  var out = [];
+  for (var i = 0; i < DICT.length && out.length < count; i++) {
+    if (DICT[i].g === entry.g && DICT[i].id !== entry.id) {
+      out.push({ symbol: DICT[i], hits: 0, matched: [], weak: false, neighbor: true });
+    }
+  }
+  return out;
+}
+
+function selectedMood() {
+  var vals = [];
+  var boxes = document.querySelectorAll('input[name="mood"]');
+  for (var i = 0; i < boxes.length; i++) if (boxes[i].checked) vals.push(boxes[i].value);
+  return vals.join(" and ");
+}
+
+function cardHtml(f) {
+  var s = f.symbol;
+  var note = "";
+  if (f.matched && f.matched.length) {
+    note = '<p class="matched">matched on: <em>' + escapeHtml(f.matched.join(", ")) + '</em></p>';
+  } else if (f.neighbor) {
+    note = '<p class="matched">shown because it usually appears alongside the entry above</p>';
+  }
+  return '<article class="symbol">' +
+    '<div class="name"><h3>' + escapeHtml(s.n) + '</h3><span class="group">' + escapeHtml(s.g) + '</span></div>' +
+    note +
+    '<p class="line"><b>Worth sitting with</b>' + escapeHtml(s.q) + '</p>' +
+    '<p class="line"><b>Plain meaning</b>' + escapeHtml(s.p) + '</p>' +
+    '<p class="line"><b>What tradition says</b>' + escapeHtml(s.t) + '</p>' +
+    '</article>';
+}
+
+function render(result) {
+  var box = document.getElementById("results");
+  var found = result.found;
+
+  if (!result.tokens) {
+    box.innerHTML = '<div class="panel"><p class="kicker">Nothing to read yet</p>' +
+      '<p class="empty">Write a few lines about the dream first, then press <b>Read my dream</b>.</p></div>';
+    box.hidden = false;
+    return;
+  }
+
+  if (!found.length) {
+    box.innerHTML =
+      '<div class="panel">' +
+      '<p class="kicker">Nothing in the index matched</p>' +
+      '<p>The index did not recognize anything in what you wrote. That usually means the dream was told as a mood or a scene rather than with the things that were in it.</p>' +
+      '<p>Try naming what you actually saw — the people, animals, places and objects. The ones that come up most often are ' +
+      escapeHtml(formatList(suggestionNames())) + '.</p>' +
+      '<p>Or open <b>Browse the full index</b> below: ' + DICT.length +
+      ' entries, and the one that makes you stop is usually the one worth reading.</p>' +
+      '</div>';
+    box.hidden = false;
+    return;
+  }
+
+  var strong = found.filter(function (f) { return !f.weak; });
+  var weak = found.filter(function (f) { return f.weak; });
+  if (!strong.length) { strong = found.slice(0, 2); weak = []; }   /* 全是弱命中时，主区不能空着 */
+
+  var mood = selectedMood();
+  var lead = (strong.length === 1) ? strong.concat(neighbors(strong[0].symbol, 2)) : strong;
+
+  var chips = strong.map(function (f) { return '<li>' + escapeHtml(f.symbol.n) + '</li>'; }).join("");
+
+  var top = lead.slice(0, 3);
+  var more = lead.slice(3);
+  var cards = top.map(cardHtml).join("");
+  if (more.length) {
+    cards += '<details class="more"><summary>Everything else that matched (' + more.length +
+             ')</summary>' + more.map(cardHtml).join("") + '</details>';
+  }
+
+  var weakHtml = "";
+  if (weak.length) {
+    weakHtml = '<div class="panel"><details class="more"><summary>May also fit, on a single everyday word (' +
+      weak.length + ')</summary>' + weak.map(cardHtml).join("") + '</details></div>';
+  }
+
+  box.innerHTML =
+    '<div class="panel">' +
+      '<p class="kicker">What the dictionary found</p>' +
+      '<ul class="chips">' + chips + '</ul>' +
+    '</div>' +
+    '<div class="panel">' +
+      '<h2>Putting it together</h2>' +
+      '<p>' + escapeHtml(buildSummary(strong, weak.length, mood)) + '</p>' +
+    '</div>' +
+    '<div class="panel">' +
+      '<h2>The symbols, one by one</h2>' +
+      cards +
+    '</div>' +
+    weakHtml;
+  box.hidden = false;
+}
+
+/* =====================================================================
+   BROWSE THE FULL INDEX
+   ===================================================================== */
+function renderBrowse() {
+  var host = document.getElementById("browse-body");
+  var byGroup = {};
+  var order = [];
+  for (var i = 0; i < DICT.length; i++) {
+    var g = DICT[i].g;
+    if (!byGroup[g]) { byGroup[g] = []; order.push(g); }
+    byGroup[g].push(DICT[i]);
+  }
+  var html = "<p class=\"hint\">" + DICT.length + " symbols.</p>";
+  for (var j = 0; j < order.length; j++) {
+    html += '<p class="letter">' + escapeHtml(order[j]) + '</p>';
+    for (var m = 0; m < byGroup[order[j]].length; m++) {
+      var s = byGroup[order[j]][m];
+      html += '<p class="browse-item"><b>' + escapeHtml(s.n) + '</b> — ' + escapeHtml(s.p) + '</p>';
+    }
+  }
+  host.innerHTML = html;
+}
+
+/* =====================================================================
+   WIRING
+   ===================================================================== */
+var SAMPLE = "I was back in my old school, late for an exam I hadn't studied for. " +
+  "I kept trying to find the classroom but the hallways kept changing and I got lost. " +
+  "When I finally walked in, I realized I was naked and everyone was watching me. " +
+  "Then the floor turned to water and I started sinking.";
+
+function run() {
+  var text = document.getElementById("dream").value;
+  var result = analyse(text);
+  render(result);
+  var box = document.getElementById("results");
+  if (box.scrollIntoView) box.scrollIntoView({ behavior: "smooth", block: "start" });
+  return result;
+}
+
+function applySiteName() {
+  document.title = SITE_NAME;
+  var h1 = document.getElementById("site-name");
+  var f = document.getElementById("footer-name");
+  if (h1) h1.textContent = SITE_NAME;
+  if (f) f.textContent = SITE_NAME;
+}
+
+function init() {
+  applySiteName();
+  renderBrowse();
+  document.getElementById("analyze").addEventListener("click", run);
+  /* 勾选/取消"当时什么感觉"后，若已有结果就顺手重算一次 */
+  var moods = document.querySelectorAll('input[name="mood"]');
+  for (var i = 0; i < moods.length; i++) {
+    moods[i].addEventListener("change", function () {
+      var box = document.getElementById("results");
+      if (box && !box.hidden && document.getElementById("dream").value.trim()) run();
+    });
+  }
+  document.getElementById("sample").addEventListener("click", function () {
+    document.getElementById("dream").value = SAMPLE;
+    run();
+  });
+  document.getElementById("clear").addEventListener("click", function () {
+    document.getElementById("dream").value = "";
+    var moods2 = document.querySelectorAll('input[name="mood"]');
+    for (var k = 0; k < moods2.length; k++) moods2[k].checked = false;
+    var box = document.getElementById("results");
+    box.hidden = true;
+    box.innerHTML = "";
+    document.getElementById("dream").focus();
+  });
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  init();
+}
+
+/* Small hook so the file can be checked from a script or the console. */
+window.DreamIndex = { analyse: analyse, DICT: DICT, render: render, siteName: SITE_NAME };
+</script>
+</body>
+</html>
