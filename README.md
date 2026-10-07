@@ -6,7 +6,7 @@ Type a dream. The page looks for **symbol words** in what you wrote, matches the
 
 ## What this is — and is not
 
-- **Not an AI.** Nothing is generated, guessed, or sent anywhere. No server, no account, no tracking, no analytics, no network requests at all.
+- **Not an AI.** Nothing is generated, guessed, or sent anywhere. No server, no account, no cookies, no tracking. As shipped it makes **no network requests at all**; there is one optional anonymous page counter that stays switched off until a token is configured.
 - **Not a prediction.** It does not tell you what will happen. It is a dictionary, plus a few questions worth sitting with.
 - **Honest about its limits.** Most entries are written at the level of a tradition ("a common reading", "in Jungian terms"), not as citations to a specific book or page.
 - `For reflection, not diagnosis.`

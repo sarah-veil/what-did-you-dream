@@ -245,7 +245,7 @@
   </main>
 
   <footer class="site">
-    <p><span id="footer-name">What Did You Dream?</span> — a static page. No accounts, no tracking, no analytics.</p>
+    <p><span id="footer-name">What Did You Dream?</span> — a static page. <span id="privacy-note">No accounts, no tracking, no analytics.</span></p>
     <p>For reflection, not diagnosis.</p>
   </footer>
 
@@ -261,6 +261,21 @@
    Name:              "What Did You Dream?"
    Alternatives considered:  "Sleep Signals"  |  "What Did You Dream?" (chosen)
    ===================================================================== */
+// ── 访问计数（默认关闭）─────────────────────────────────────────────
+// 留空 = 本站保持「零网络请求」，页脚承诺照旧，一个字都不假。
+// 填上 Cloudflare Web Analytics 的 token = 启用；页脚会自动换成如实版本。
+var ANALYTICS_TOKEN = "";
+(function () {
+  if (!ANALYTICS_TOKEN) return;
+  var note = document.getElementById("privacy-note");
+  if (note) note.textContent =
+    "No accounts, no cookies. One anonymous page count \u2014 no personal data, and nothing you type leaves the page.";
+  var b = document.createElement("script");
+  b.defer = true;
+  b.src = "https://static.cloudflareinsights.com/beacon.min.js";
+  b.setAttribute("data-cf-beacon", JSON.stringify({ token: ANALYTICS_TOKEN }));
+  document.head.appendChild(b);
+})();
 var SITE_NAME = "What Did You Dream?";
 
 /* =====================================================================
