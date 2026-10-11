@@ -1,0 +1,40 @@
+name: Feedback / 反馈
+description: Which reading landed, which one didn't · 哪条说到你了，哪条是废话
+title: "[Feedback] "
+labels: ["feedback"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        No need to be polite about it — **specific beats kind**.
+
+        不用写得客气 —— **说得具体比说得好听有用**。
+  - type: input
+    id: dream
+    attributes:
+      label: The dream you typed / 你写的是什么梦
+      description: So I can reproduce the entries you saw. Leave blank if you'd rather not. / 用来复现你看到的那几条。不想给就留空。
+  - type: textarea
+    id: landed
+    attributes:
+      label: Which reading landed on you / 哪一条说到你了
+      description: Name the symbol and the line, and say why. / 具体是哪条词、哪句话，也说说为什么。
+    validations:
+      required: true
+  - type: textarea
+    id: missed
+    attributes:
+      label: Which reading was empty / 哪一条是废话
+      description: "The test is simple: **could that line apply to anybody?** If yes, it does not belong here. / 判断标准很简单：**这句话套在任何人身上都成立吗？** 如果是，它就不该在这儿。"
+    validations:
+      required: true
+  - type: textarea
+    id: missing
+    attributes:
+      label: What did you dream that it could not find at all / 有什么梦它根本查不到
+      description: 84 entries is nowhere near enough. Which word do you most want it to know? / 84 条远远不够。你最想它认得哪个词？
+  - type: textarea
+    id: else
+    attributes:
+      label: Anything else / 其他任何事
+      description: Layout on your phone, speed, a feature you want, a line you could not parse. / 手机上排版、速度、想要什么功能、哪里看不懂。

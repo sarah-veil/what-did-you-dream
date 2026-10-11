@@ -1,0 +1,46 @@
+name: A symbol is wrong / 词条不对
+description: A word matched that shouldn't have, a word was missed, or an entry reads wrong · 匹配错了、漏匹配了、释义不对
+title: "[Symbol] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This site is a **hand-written index**, not an AI — 84 symbols, matched by literal keyword.
+        So when it is wrong, it is wrong in a way **you can point at**.
+
+        这个站是个**手写索引**，不是 AI —— 84 条词条，按字面关键词匹配。
+        所以它错了，就是**能指出错在哪**的。
+  - type: textarea
+    id: dream
+    attributes:
+      label: What you typed / 你写了什么
+      description: Paste it, or drop a screenshot. / 原文照抄，或截图。
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of wrong / 哪一类问题
+      options:
+        - A word should have matched and didn't / 该匹配的词没匹配上
+        - A word matched that shouldn't have / 不该匹配的词匹配上了
+        - The entry's reading is wrong / 词条释义不对
+        - A symbol is missing entirely / 少了某个词条
+        - Not sure, but the result is off / 说不清，但结果不对
+    validations:
+      required: true
+  - type: textarea
+    id: got
+    attributes:
+      label: What the page gave you / 页面给出的是什么
+      description: Copy the words it says it matched, and the readings it showed. / 把它说的 matched 那几个词和给出的释义抄过来。
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected, and on what basis / 你觉得应该是什么，凭什么
+      description: Name the tradition, book, or page and I will go check it. **A named source beats a hunch.** / 附录了哪个传统、哪本书、哪一页我就去核。**具体来源比"我感觉不对"有用得多。**
+    validations:
+      required: true
