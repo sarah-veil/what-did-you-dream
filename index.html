@@ -1,28 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Write down a dream. See which symbols a hand-written index finds in it, and what each has traditionally been taken to mean. Not AI, not a diagnosis — and nothing you type leaves the page.">
+<meta name="description" content="写下你的梦，查一查传统梦境词典能找到哪些象征。纯本地、无账号、无追踪，不是 AI，也不是诊断。">
 <meta name="color-scheme" content="light dark">
-<link rel="canonical" href="https://sarah-veil.github.io/what-did-you-dream/">
+<link rel="canonical" href="https://dream.dqquan.com/">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="What Did You Dream?">
-<meta property="og:title" content="What Did You Dream?">
+<meta property="og:site_name" content="你梦见什么？">
+<meta property="og:title" content="你梦见什么？">
 <meta property="og:description" content="Write down a dream. See which symbols a hand-written index finds in it, and what each has traditionally been taken to mean. Not AI, not a diagnosis — and nothing you type leaves the page.">
-<meta property="og:url" content="https://sarah-veil.github.io/what-did-you-dream/">
-<meta property="og:image" content="https://sarah-veil.github.io/what-did-you-dream/og.png">
+<meta property="og:url" content="https://dream.dqquan.com/">
+<meta property="og:image" content="https://dream.dqquan.com/og.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="What Did You Dream? &mdash; a dream-symbol dictionary: the symbols it finds in a dream you describe">
+<meta property="og:image:alt" content="你梦见什么？——从你写下的梦境中找出传统象征词典收录的意象">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="What Did You Dream?">
-<meta name="twitter:description" content="Write down a dream. See which symbols a hand-written index finds in it, and what each has traditionally been taken to mean. Not AI, not a diagnosis — and nothing you type leaves the page.">
-<meta name="twitter:image" content="https://sarah-veil.github.io/what-did-you-dream/og.png">
+<meta name="twitter:title" content="你梦见什么？">
+<meta name="twitter:description" content="写下你的梦，查一查传统梦境词典能找到哪些象征。纯本地、无账号、无追踪，不是 AI，也不是诊断。">
+<meta name="twitter:image" content="https://dream.dqquan.com/og.png">
 
 <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAZ0lEQVR42mNgGAVDDeT76/8fMItheMAsHtmW09UB2CwfOQ7AZfnIcAA+y0cdMOoAujiCGAfQ1BFDxgGDxhE0cQipDiDFEUSrJccRVA2tAXcALRxBt/RA9YQ6oJYPquw5aCqsUUBtAABmd/HUgGcmigAAAABJRU5ErkJggg==">
-<title>What Did You Dream?</title>
+<title>你梦见什么？ · 梦境象征词典</title>
 <style>
   /* ---------- base ---------- */
   *, *::before, *::after { box-sizing: border-box; }
@@ -74,9 +74,27 @@
   h3 { font-size: 1.05rem; margin: 0 0 .5rem; }
   p { margin: 0 0 .75rem; }
   a { color: var(--accent); }
+  [hidden] { display: none !important; }
+  html[lang^="zh"] .lang-en,
+  html:not([lang^="zh"]) .lang-zh { display: none !important; }
 
   /* ---------- header ---------- */
   header.site { border-bottom: 1px solid var(--line); padding-bottom: 1rem; margin-bottom: 1.4rem; }
+  .site-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+  .lang { display: flex; gap: .35rem; flex: 0 0 auto; }
+  .lang button {
+    padding: .3rem .62rem;
+    border-radius: 999px;
+    font-size: .78rem;
+    color: var(--soft);
+    background: transparent;
+  }
+  .lang button[aria-pressed="true"] {
+    color: var(--paper);
+    background: var(--accent);
+    border-color: var(--accent);
+    font-weight: 600;
+  }
   .tagline { color: var(--soft); margin: 0 0 .6rem; font-size: .95rem; }
   .disclosure {
     font-size: .82rem;
@@ -194,6 +212,11 @@
   /* ---------- browse ---------- */
   details.browse { border: 1px solid var(--line); border-radius: var(--radius); background: var(--card); padding: .8rem 1.05rem; }
   details.browse > summary { cursor: pointer; font-weight: 600; font-family: var(--serif); font-size: 1.05rem; }
+  details.sources { margin-top: 1rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--card); padding: .8rem 1.05rem; }
+  details.sources > summary { cursor: pointer; font-weight: 600; font-family: var(--serif); font-size: 1.05rem; }
+  .source-list { margin: .75rem 0 0; padding-left: 1.15rem; font-size: .9rem; color: var(--soft); }
+  .source-list li { margin-bottom: .45rem; }
+  .result-actions { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1rem; }
   .letter { font-size: .78rem; letter-spacing: .09em; text-transform: uppercase; color: var(--faint); margin: 1.1rem 0 .35rem; }
   .browse-item { margin: 0 0 .45rem; font-size: .93rem; color: var(--soft); }
   .browse-item b { color: var(--ink); font-weight: 600; }
@@ -207,46 +230,83 @@
   }
   footer.site p { margin: 0 0 .35rem; }
   .empty { color: var(--soft); }
+  @media (max-width: 520px) {
+    .wrap { padding: 1rem .85rem 2.5rem; }
+    .site-top { align-items: center; }
+    h1 { font-size: 1.45rem; }
+    .tagline { margin-bottom: .35rem; }
+    button, textarea { font-size: 16px; }
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
 
   <header class="site">
-    <h1 id="site-name">What Did You Dream?</h1>
-    <p class="tagline">Write it the way you would tell someone. Messy is fine — fragments count.</p>
+    <div class="site-top">
+      <h1 id="site-name">你梦见什么？</h1>
+      <div class="lang" aria-label="Language">
+        <button type="button" data-lang="zh" aria-pressed="true">中文</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </div>
+    <p class="tagline" id="tagline">像讲给朋友听那样写下来。零碎、混乱都没关系。</p>
   </header>
 
   <main>
-    <label class="field" for="dream">What did you dream?</label>
+    <label class="field" for="dream" id="dream-label">你梦见了什么？</label>
     <textarea id="dream" rows="7" spellcheck="false" placeholder="I was back in my old school, late for an exam I hadn't studied for. I couldn't find the classroom, and when I got there everyone was watching me."></textarea>
     <fieldset class="mood">
-      <legend>How did it feel while you were in it? <span class="opt">optional</span></legend>
-      <label><input type="checkbox" name="mood" value="Afraid"> Afraid</label>
-      <label><input type="checkbox" name="mood" value="Ashamed"> Ashamed</label>
-      <label><input type="checkbox" name="mood" value="Relieved"> Relieved</label>
-      <label><input type="checkbox" name="mood" value="Calm"> Calm</label>
-      <label><input type="checkbox" name="mood" value="It made no sense"> It made no sense</label>
-      <label><input type="checkbox" name="mood" value="Can't say"> Can't say</label>
+      <legend><span class="lang-zh">在梦里是什么感觉？</span><span class="lang-en">How did it feel while you were in it?</span> <span class="opt"><span class="lang-zh">可多选</span><span class="lang-en">optional</span></span></legend>
+      <label><input type="checkbox" name="mood" value="afraid"> <span class="lang-zh">害怕</span><span class="lang-en">Afraid</span></label>
+      <label><input type="checkbox" name="mood" value="ashamed"> <span class="lang-zh">羞愧</span><span class="lang-en">Ashamed</span></label>
+      <label><input type="checkbox" name="mood" value="relieved"> <span class="lang-zh">释然</span><span class="lang-en">Relieved</span></label>
+      <label><input type="checkbox" name="mood" value="calm"> <span class="lang-zh">平静</span><span class="lang-en">Calm</span></label>
+      <label><input type="checkbox" name="mood" value="confusing"> <span class="lang-zh">说不通</span><span class="lang-en">It made no sense</span></label>
+      <label><input type="checkbox" name="mood" value="unsure"> <span class="lang-zh">说不上来</span><span class="lang-en">Can't say</span></label>
     </fieldset>
-    <p class="hint">The more you name — places, people, objects, what happened — the more there is to work with. Nothing you type leaves this page: no server, no account, nothing saved. The readings come from a fixed, hand-written dictionary of dream symbols, not from AI.</p>
+    <p class="hint" id="input-hint">尽量写出地点、人物、物件和发生的事。你输入的内容不会离开这个页面：没有服务器、没有账号，也不保存。解读来自固定的梦境象征词典，不是 AI。</p>
     <div class="row">
-      <button class="primary" id="analyze" type="button">Read my dream</button>
-      <button id="sample" type="button">Try an example</button>
-      <button id="clear" type="button">Clear</button>
+      <button class="primary" id="analyze" type="button">查看我的梦</button>
+      <button id="sample" type="button">试试示例</button>
+      <button id="clear" type="button">清空</button>
     </div>
 
     <section id="results" hidden aria-live="polite"></section>
 
     <details class="browse">
-      <summary>Browse the full index</summary>
+      <summary id="browse-summary">翻看完整词典</summary>
       <div id="browse-body"></div>
+    </details>
+
+    <details class="sources">
+      <summary id="sources-summary">来源与方法</summary>
+      <div class="lang-zh">
+        <p>这页不把梦当成事实，也不把任何一条解释当成唯一答案。条目综合了三类公开传统：古代梦书、精神分析，以及现代民俗型梦境词典中的常见说法。</p>
+        <ul class="source-list">
+          <li>Artemidorus，《Oneirocritica》（约公元 2 世纪）</li>
+          <li>Sigmund Freud，《The Interpretation of Dreams》（1900）</li>
+          <li>C. G. Jung，《Collected Works》第 8、9i、12 卷</li>
+          <li>常见民俗母题与现代梦境词典，仅用于对照，不照搬原文</li>
+        </ul>
+        <p class="hint">传统之间会互相矛盾。这里写“常见解读”，是说明它属于哪种解释传统，并非宣称它对你一定成立。</p>
+      </div>
+      <div class="lang-en">
+        <p>This page treats neither dreams nor any single reading as a fact. The entries summarise recurring interpretations from three public traditions: early dream manuals, psychoanalysis, and modern folk dream dictionaries.</p>
+        <ul class="source-list">
+          <li>Artemidorus, <i>Oneirocritica</i> (2nd century CE)</li>
+          <li>Sigmund Freud, <i>The Interpretation of Dreams</i> (1900)</li>
+          <li>C. G. Jung, <i>Collected Works</i>, volumes 8, 9i, and 12</li>
+          <li>Common folk motifs and modern dream dictionaries, used for comparison rather than copied</li>
+        </ul>
+        <p class="hint">Traditions disagree. “A common reading” names a tradition; it does not claim that the reading is true for you.</p>
+      </div>
     </details>
   </main>
 
   <footer class="site">
-    <p><span id="footer-name">What Did You Dream?</span> — a static page. <span id="privacy-note">No accounts, no tracking, no analytics.</span></p>
-    <p>For reflection, not diagnosis.</p>
+    <p><span id="footer-name">你梦见什么？</span> — <span class="lang-zh">一个纯静态页面。</span><span class="lang-en">a static page.</span> <span id="privacy-note">无账号，无追踪，无统计。</span></p>
+    <p><span class="lang-zh">供自省，不作诊断。</span><span class="lang-en">For reflection, not diagnosis.</span> · <a href="mailto:hello@dqquan.com?subject=%E4%BD%A0%E6%A2%A6%E8%A7%81%E4%BB%80%E4%B9%88%20%C2%B7%20%E8%AF%BB%E8%80%85%E5%8F%8D%E9%A6%88"><span class="lang-zh">写信说说</span><span class="lang-en">Send feedback</span></a></p>
   </footer>
 
 </div>
@@ -276,7 +336,12 @@ var ANALYTICS_TOKEN = "";
   b.setAttribute("data-cf-beacon", JSON.stringify({ token: ANALYTICS_TOKEN }));
   document.head.appendChild(b);
 })();
-var SITE_NAME = "What Did You Dream?";
+var LANG = "zh";
+try {
+  LANG = (localStorage.getItem("dream.lang") ||
+    ((navigator.language || "zh").toLowerCase().startsWith("zh") ? "zh" : "en")) === "en" ? "en" : "zh";
+} catch (e) {}
+var SITE_NAME = LANG === "zh" ? "你梦见什么？" : "What Did You Dream?";
 
 /* =====================================================================
    SYMBOL DICTIONARY — DICT-START
@@ -798,6 +863,351 @@ var DICT = [
 ];
 /* SYMBOL DICTIONARY — DICT-END */
 
+/* =====================================================================
+   CHINESE INDEX
+   Chinese is matched by literal phrase rather than by token boundaries.
+   The interpretations are written for Chinese readers rather than
+   translated word-for-word from the English entries.
+   ===================================================================== */
+var DICT_ZH = [
+  { id:"water", n:"水", k:["水","积水","漏水","湿透","被淹","洪水"],
+    p:"水常代表情绪状态。水面平静，心绪多半也平；水浑、流急，往往说明感受还没有沉淀。",
+    t:"这是最普遍的梦境意象之一。民俗常把它看作情绪的天气；荣格派则把水视为潜意识的材料。",
+    q:"梦里的水是什么样子？它像你最近几周的心情吗？" },
+  { id:"flooding", n:"洪水与溺水", k:["洪水","淹没","溺水","沉下去","水下","海啸","巨浪"],
+    p:"被水淹没，常对应现实里某件事已经大过你能轻松承受的范围。",
+    t:"传统解读多把洪水看作来得太快的压力：账单、期限、家庭状况或积压的情绪。溺水更强调无力感。",
+    q:"现在有什么事一直占地方，已经超过你能给的空间？" },
+  { id:"ocean", n:"海与远岸", k:["大海","海洋","海边","海岸","沙滩","远岸"],
+    p:"开阔的海常指人生中最大的未知：未来、远方，或还看不清边界的情感。",
+    t:"民俗常把海看作不以个人意志为转移的力量。荣格派所说的集体潜意识，也常以海来象征。",
+    q:"梦里你是在岸上看海，还是已经身处水中？" },
+  { id:"river", n:"河流与溪水", k:["河","河流","小溪","溪水","急流","水流","河岸"],
+    p:"河流常代表人生已经在走的方向，不论这条路是不是你亲手选的。",
+    t:"跨河常被看作状态转换；站在岸边看水流过，则像看着变化发生而没有参与。流速往往比河的大小更重要。",
+    q:"梦里是水流带着你走，还是你站着看它过去？" },
+  { id:"swimming", n:"游泳", k:["游泳","游水","在水里游","划水"],
+    p:"游泳多指靠自己的力量穿过情绪，而不是被情绪卷走。",
+    t:"常见解读强调主动权：你在水里，而且是你自己在往前。它常与溺水成对出现，两者的区别是有没有掌控感。",
+    q:"梦里你在水里自在，还是游得比想用的力气更多？" },
+  { id:"floating", n:"漂浮与漂流", k:["漂浮","漂着","浮起来","失重","漂流","随波逐流"],
+    p:"漂浮常出现在暂时卸下力气的时候：休息、接受，或终于不用再扛。",
+    t:"漂浮偏向放松，漂流则可能是放松过了头。一个像被托住，一个像失去了方向。",
+    q:"那种漂浮像休息，还是像找不到自己的位置？" },
+  { id:"rain", n:"雨", k:["下雨","雨中","雨水","暴雨","细雨","毛毛雨"],
+    p:"雨通常是日常的情绪天气，不一定代表危机。",
+    t:"民俗常把雨与低落、哀伤或需要等待过去的心情联系起来。细雨较容易承受，大雨更接近压力。",
+    q:"如果最近几周有一份天气报告，它会像梦里的这场雨吗？" },
+  { id:"storm", n:"暴风雨与雷电", k:["暴风雨","雷雨","打雷","闪电","飓风","龙卷风","风暴"],
+    p:"风暴往往出现在某件事积压已久、终于发出声音的时候。",
+    t:"常见解读把雷电视为警告与触点：情绪来得猛烈，但会过去。重点常在“响而短暂”。",
+    q:"梦里的什么，和这场风暴同形：突然、响亮，而且快散时最猛？" },
+  { id:"snow", n:"雪与冰", k:["下雪","雪地","暴雪","冰","结冰","霜","冰雹","冻结"],
+    p:"雪和冰常意味着情绪被降温、暂停，或与某件事保持了距离。",
+    t:"雪常读作安静、遮盖；冰则更像难以穿行。冰裂开或融化的意象通常更积极。",
+    q:"梦里的冷，和你最近有意保持距离的什么有关？" },
+  { id:"fog", n:"雾", k:["雾","大雾","雾气","薄雾","迷蒙"],
+    p:"雾多半不是出了错，而是还看不清下一步。",
+    t:"传统解读常把雾看作暂时的未知。梦里你是否继续向前，比雾本身更有信息。",
+    q:"梦里你停在雾中，还是继续往前走？" },
+  { id:"falling", n:"坠落", k:["坠落","掉下去","摔下去","下落","跌落","往下掉"],
+    p:"坠落很常见，常指在计划、角色或掌控感上失去落脚点。",
+    t:"常见解读把坠落与失去支撑、害怕失手联系在一起；梦里的失重感通常比落地更重要。",
+    q:"梦里你原本站在什么上面？它在现实中代表什么？" },
+  { id:"flying", n:"飞翔", k:["飞翔","飞行","飞起来","在空中飞","翱翔","滑翔"],
+    p:"飞翔常代表自由、视角，或暂时飞到一个问题之上。",
+    t:"飞得轻松常读作自信与掌控；费力飞不高，则更像想要抽离却还没做到。",
+    q:"梦里飞得轻松，还是需要一直用力才不掉下去？" },
+  { id:"chased", n:"被追赶", k:["被追","追赶","追我","逃跑","逃命","有人追","追杀"],
+    p:"被追赶常与回避有关：有件事你一直在往前躲，而没有转身面对。",
+    t:"传统解读常把追赶者看作还不愿正视的东西。许多这类梦都在你将要停下来时结束。",
+    q:"如果你慢下来，让后面的东西追上，你觉得它会是什么？" },
+  { id:"late", n:"迟到", k:["迟到","来不及","赶不上","超时","睡过头","匆忙","赶时间"],
+    p:"迟到多指向现实里的压力：日程、责任，或一个你觉得自己没达到的标准。",
+    t:"常见解读认为迟到是预演恐惧，而不是预言。梦里来不及，往往说明你怕自己不够好。",
+    q:"梦里你在赶谁的时间表：自己的，还是别人的？" },
+  { id:"lost", n:"迷路", k:["迷路","找不到路","走错路","迷宫","流浪","被困住","找不到出口"],
+    p:"迷路常对应对下一步还不清楚的一段时间。",
+    t:"传统解读把迷路看作过渡，而不是失败。熟悉处迷路偏向失序，陌生处迷路更接近探索。",
+    q:"梦里迷路的地方，是你熟悉的，还是从没去过的？" },
+  { id:"stuck", n:"卡住与动不了", k:["卡住","动不了","瘫痪","鬼压床","走不动","慢动作","想跑跑不动"],
+    p:"卡住常出现在你知道自己想要什么，却无法让它发生的处境里。",
+    t:"常见解读把这种梦看作意愿与行动之间的落差。身体感越真实，醒来后往往记得越久。",
+    q:"现实里有什么是你清楚想做、却一直没有动的？" },
+  { id:"climbing", n:"攀登", k:["爬山","攀登","往上爬","爬梯子","攀岩","爬坡"],
+    p:"攀登常代表为重要之事付出努力，高度则是离目标还有多远。",
+    t:"传统解读多把攀爬看作志向或恢复。攀爬有多难，往往比山顶的景色更有提示。",
+    q:"梦里爬得有多难？同样的难，在现实里是什么感觉？" },
+  { id:"choking", n:"窒息与喘不过气", k:["窒息","喘不过气","无法呼吸","呼吸困难","被捂住","憋气"],
+    p:"梦中难以呼吸，常代表压力：事情太多，空间太少。",
+    t:"常见解读把它与受限、被期待压住联系在一起，也会和被困、被埋的梦一起出现。",
+    q:"现在是什么占用的空间，已经超过你能给的？" },
+  { id:"naked", n:"当众赤裸", k:["裸体","没穿衣服","赤身裸体","当众没穿","衣服没了","被人看光"],
+    p:"当众赤裸常指暴露：害怕别人看见真实的你。",
+    t:"这是常见的焦虑梦。传统解读强调怕被评判；另一个常见细节是，梦里其他人往往并没有那么在意。",
+    q:"如果你不再管理别人怎么看你，他们会看见什么？" },
+  { id:"teeth", n:"掉牙", k:["掉牙","牙齿掉了","牙松动","牙齿碎","拔牙","没牙"],
+    p:"掉牙是报告最多的梦境之一，常与在意别人如何看待自己、害怕失去不可替代之物有关。",
+    t:"传统里有几种解释：失去青春或某人；牙齿代表说话，因此害怕说错或不被听见；弗洛伊德派也会联系身体焦虑。",
+    q:"梦里的失去，是不是你清醒时也害怕失去的东西？" },
+  { id:"hair", n:"头发", k:["头发","剪发","理发","掉头发","秃头","剃头","辫子","马尾"],
+    p:"头发常关乎身份，也关乎你愿意让别人看见多少真实的自己。",
+    t:"剪发常读作主动改变自我形象，掉发则像同样的改变未经允许发生。梦里你对结果的感受最要紧。",
+    q:"梦里头发的变化，是你自己选的吗？" },
+  { id:"blood", n:"血", k:["血","流血","出血","血迹","献血"],
+    p:"血常代表生命力，也常出现在某件事让你付出很大代价的时候。",
+    t:"常见解读把血与精力、感情的付出联系起来；旧民俗也常把它视为强烈情绪，而不是伤害的预兆。",
+    q:"哪里让你觉得自己付出的，比收回来的多？" },
+  { id:"crying", n:"哭泣", k:["哭","哭泣","流泪","眼泪","大哭","抽泣"],
+    p:"梦里哭通常是一种释放：某种情绪终于找到了出口。",
+    t:"传统解读常把梦中哭泣看作比清醒时更温和的消化过程。哭不完，则可能是情绪仍被压着。",
+    q:"梦里的哭是一种解脱，还是怎么也哭不完？" },
+  { id:"injury", n:"受伤", k:["受伤","伤口","流血受伤","摔伤","断腿","断手","扭伤","淤青"],
+    p:"受伤常指已经发生的疼，或你正为它做准备的疼。",
+    t:"常见解读倾向于把梦中的伤视为情绪伤。伤在脚上可能关乎方向，在手上关乎做事，在胸口关乎感受。",
+    q:"有没有一处伤，你一直当作已经好了？" },
+  { id:"scream", n:"喊不出声", k:["喊不出声","发不出声音","尖叫","失声","说不出话","没人听见"],
+    p:"想喊却没有声音，常指你觉得自己没有被该听见的人听见。",
+    t:"这个意象常与窒息、被困一起出现，共同点是发出信号却没有回应。它也常出现在长期不被倾听之后。",
+    q:"现在你最希望谁能真正听见你？" },
+  { id:"sick", n:"呕吐与生病", k:["呕吐","吐了","恶心","生病","发烧","食物中毒","反胃"],
+    p:"梦中生病或呕吐，常指你接收了某样已经不再适合你的东西。",
+    t:"常见解读偏向排斥：一种处境、承诺或感受，你想把它从身体里清出去。梦里的病通常不是身体预言。",
+    q:"最近有什么是你接下了，却不想继续背着的？" },
+  { id:"eyes", n:"眼睛与视力", k:["眼睛","看不见","失明","睁不开眼","视力模糊","闭眼"],
+    p:"梦见失明，常不是眼睛的问题，而是不愿看见某件事。",
+    t:"常见解读把看不见与拒绝面对联系起来；睁眼却一片黑暗，更偏向不确定。荣格派常把它看作心理暂时拉上帘子。",
+    q:"最近有什么被你放在视线边缘，没有正面看？" },
+  { id:"snake", n:"蛇", k:["蛇","蟒蛇","毒蛇","蛇皮","蛇咬"],
+    p:"蛇常代表一种强大却容易忽略的力量：一段感受、一个真相，或已经开始的变化。",
+    t:"传统里有两条主线：危险与转化。蛇蜕皮常使它成为深层变化的象征；荣格派对这一层尤其重视。",
+    q:"梦里的蛇让你害怕，还是让你好奇？" },
+  { id:"cat", n:"猫", k:["猫","小猫","黑猫","白猫","猫咪"],
+    p:"猫常代表独立与本能，也就是你不愿完全听从指令的那一部分。",
+    t:"常见解读把猫看作亲近而有边界的存在。它靠近或离开的方式，往往比出现本身更值得留意。",
+    q:"最近有什么，你正在让它按自己的节奏靠近？" },
+  { id:"dog", n:"狗", k:["狗","小狗","黑狗","白狗","狗叫","忠犬"],
+    p:"狗常代表忠诚、友情，以及守护某样东西的本能。",
+    t:"传统解读会把狗与陪伴、保护和警戒联系起来。梦里狗友善还是防御，会改变含义。",
+    q:"现在你在守护谁，或守护什么？" },
+  { id:"birds", n:"鸟", k:["鸟","小鸟","飞鸟","喜鹊","乌鸦","猫头鹰","羽毛"],
+    p:"鸟常代表念头、消息，或从远处来到你这里的东西。",
+    t:"常见解读把鸟视为信使：不同种类的鸟带来不同语气。羽毛常像已经离开的事物留下的痕迹。",
+    q:"你一直在等什么消息，却不肯承认自己在等？" },
+  { id:"spiders", n:"蜘蛛与昆虫", k:["蜘蛛","虫","虫子","蚂蚁","蟑螂","蚊子","蜂"],
+    p:"蜘蛛和昆虫常代表已经繁殖变多的小忧虑，而不是一件巨大的问题。",
+    t:"传统解读通常强调细碎、反复、难以彻底清除的烦恼。梦里你是在清理，还是任它们结网，很关键。",
+    q:"有没有一件事，处理起来比周围一堆小事更容易？" },
+  { id:"fish", n:"鱼", k:["鱼","小鱼","大鱼","鲨鱼","金鱼","抓鱼"],
+    p:"鱼常代表刚刚浮到注意力表层之下的想法或感受。",
+    t:"常见解读把鱼与深水中的内容联系起来：抓鱼像灵感到手，鱼溜走则像洞见擦身而过。",
+    q:"有什么是你绕了一阵子，却还没有抓住的？" },
+  { id:"horse", n:"马", k:["马","骑马","奔马","野马","马车"],
+    p:"马常代表驱动力和身体能量，也关乎这股力量由谁掌控。",
+    t:"骑马常读作自己掌握节奏；被马带着跑，则像动力有了自己的方向。烈马常代表强而未定向的能量。",
+    q:"现在定节奏的是你，还是那股惯性？" },
+  { id:"predator", n:"狼与大型猛兽", k:["狼","老虎","狮子","豹","熊","猛兽","野兽","捕食者"],
+    p:"大型猛兽常代表一种比日常压力更原始、更有压迫感的威胁。",
+    t:"传统解读不一定把猛兽看作恶，也可能代表你必须敬畏的力量。它若只是看着你，未必已经发动。",
+    q:"有没有一件事，被你当成了比实际更危险的存在？" },
+  { id:"baby", n:"婴儿与孩子", k:["婴儿","宝宝","小孩","孩子","新生儿","儿童"],
+    p:"婴儿和孩子常代表新近开始、尚未完成、需要照顾的东西。",
+    t:"常见解读把婴儿看作一个项目、一段关系，或仍在成长的一部分自己。梦里你有没有照看它很重要。",
+    q:"最近有什么刚开始，需要你投入比现在更多的注意力？" },
+  { id:"pregnancy", n:"怀孕与出生", k:["怀孕","孕妇","生孩子","出生","分娩","待产"],
+    p:"梦里的怀孕多半代表某件事正在准备，而不是已经完成。",
+    t:"常见解读强调孕育：一个项目、决定或变化正在看不见的地方成形。出生则像等待结束的时刻。",
+    q:"生活里什么还在成形，暂时不适合说出口？" },
+  { id:"stranger", n:"陌生人", k:["陌生人","不认识的人","陌生男人","陌生女人","没见过的人"],
+    p:"陌生人常代表你还没有认识的那部分自己，或一个你还读不懂的处境。",
+    t:"荣格派常把陌生人物看作尚未获得位置的内在角色；民俗也会把它直接读作不可预测。对方是否友善会影响解释。",
+    q:"梦里的陌生人，像在向你索取什么吗？" },
+  { id:"death", n:"死亡与葬礼", k:["死亡","死了","葬礼","坟墓","去世","遗体"],
+    p:"梦里的死亡几乎不是预言，更常代表生活里已经结束的某一部分。",
+    t:"传统解读在这一点上相当一致：死亡指向章节、角色或旧自我的结束。梦见已故之人，常与未了结的记忆有关。",
+    q:"有什么其实已经结束，只是你还没有完全允许它成为过去？" },
+  { id:"wedding", n:"婚礼与婚姻", k:["婚礼","结婚","新娘","新郎","嫁人","娶妻"],
+    p:"婚礼常代表承诺，而且不一定是爱情承诺。",
+    t:"传统解读会看你在婚礼里的紧张程度：那往往比仪式本身更有信息。与不熟的人结婚，常像接受了一份条款还没说清的承诺。",
+    q:"现在有什么在要求你承诺？这些条件让你舒服吗？" },
+  { id:"arguing", n:"争吵与打斗", k:["争吵","吵架","打架","冲突","争论","互相攻击"],
+    p:"梦里的冲突常指现实中没有说出口的矛盾，或你内心里两股力量的拉扯。",
+    t:"常见解读认为梦里的争吵，往往是白天没发生的那一场。你在梦里是攻击者、被攻击者，还是劝架者，会改变含义。",
+    q:"梦里那个人让你想到谁，即便对方并不是那个人？" },
+  { id:"crowds", n:"人群", k:["人群","很多人","观众","陌生人很多","聚众","围观"],
+    p:"人群常代表别人期待带来的压力。",
+    t:"传统解读会留意你在人群中是融入、被围住，还是寻找出口。重点常是你觉得谁在看你。",
+    q:"你觉得自己正在表演给谁看？" },
+  { id:"past", n:"过去的人", k:["前任","老同学","旧朋友","已故的人","以前认识","故人"],
+    p:"过去的人常代表一种未完成的感觉，而不是对方传来的信息。",
+    t:"常见解读会看这个人出现时你的感受。过去的角色常常被放回当前处境里，成为一面镜子。",
+    q:"那一章结束时，还有什么没有说清？" },
+  { id:"authority", n:"权威人物", k:["老板","领导","警察","法官","官员","老师","上级","权威"],
+    p:"权威人物常代表你内心认可的标准，不管现实中是否真的有人在监督你。",
+    t:"常见解读把老板、警察或法官读作内化的规则。被询问或被带走，往往与自我审判有关。",
+    q:"梦里的你在用谁的标准衡量自己？" },
+  { id:"parent", n:"父母", k:["父亲","母亲","爸爸","妈妈","爸妈","父母"],
+    p:"梦里的父母常代表你最早形成、也最根深蒂固的标准。",
+    t:"传统解读会同时看你与父母的关系和梦里他们的态度。父母形象也可能代表照顾、约束或安全感的一部分。",
+    q:"梦里那位父母要你做什么？你现在还在用这个标准要求自己吗？" },
+  { id:"partner", n:"伴侣", k:["伴侣","爱人","配偶","丈夫","妻子","男朋友","女朋友","对象"],
+    p:"伴侣常像最靠近你的镜子，照出别人不容易看到的那一面。",
+    t:"常见解读关注的不是对方个人，而是你们之间的关系。沉默、疏远或找不到对方，常指向你早已察觉的空隙。",
+    q:"梦里有什么没有说出口？白天是不是也没有说？" },
+  { id:"friend", n:"朋友", k:["朋友","好友","闺蜜","兄弟","发小","老友"],
+    p:"梦里的朋友常代表这段友情在你生活中的某个部分，而不是关于对方的报告。",
+    t:"传统解读会留意朋友是否改变、是否认不出你。那种变化常被看作你自己的变化，而不是预言朋友会变。",
+    q:"梦里的朋友哪里不一样？现实里你还在哪里见过这种不一样？" },
+  { id:"house", n:"房屋与家", k:["房子","房屋","老家","家里","住宅","别墅","房间"],
+    p:"房屋常代表做梦者自己的生活，每个房间像生活的一部分。",
+    t:"这是传统里相当稳定的解释：房子的状态常被看作你当前的状态。陌生房间则像被忽略的自我。",
+    q:"梦里你待得最久的是哪个房间？又避开了哪一个？" },
+  { id:"rooms", n:"陌生或隐藏的房间", k:["陌生房间","隐藏的房间","新房间","密室","锁着的房间","多出来的房间"],
+    p:"熟悉的房子里出现陌生房间，常指你最近才发现自己拥有的一部分。",
+    t:"常见解读把新房间看作新的容量或资源；锁住、藏起来的房间，则像还没准备好碰的材料。",
+    q:"最近你发现自己身上，有什么是以前不知道的？" },
+  { id:"doors", n:"门", k:["门","大门","房门","开门","关门","锁门","门口","门把手"],
+    p:"门常代表选择与过渡：决定发生之前的那一刻。",
+    t:"开着的门常被看作邀请，锁住的门则像已经设下的边界。谁在握着门把手，是常见的判断细节。",
+    q:"梦里的门，是别人关上的，还是你关上的？" },
+  { id:"mirrors", n:"镜子", k:["镜子","镜中","倒影","照镜子","镜子里"],
+    p:"镜子常关乎对身份的诚实：你怎样看自己，而不是别人怎样看你。",
+    t:"传统解读会留意镜中倒影是否年纪不对、认不出或不像自己。那常指向外在样子与内在感受之间的落差。",
+    q:"镜子里的人，看起来像你此刻的感受吗？" },
+  { id:"windows", n:"窗户", k:["窗户","窗口","窗外","玻璃窗","窗边"],
+    p:"窗户常代表视角：看见某件事，却没有身在其中。",
+    t:"常见解读把窗外的渴望解释成可望而不可即；打开的窗则像你还没走出去的选项。",
+    q:"你透过窗在看什么？当时能走出去吗？" },
+  { id:"stairs", n:"楼梯", k:["楼梯","台阶","上楼","下楼","楼梯间"],
+    p:"楼梯常代表进展，方向则说明进展往哪里去。",
+    t:"上楼常读作努力与提升，下楼偏向深入或回到旧处。坏掉、走不完的楼梯，则像进展不听使唤。",
+    q:"梦里你在上楼还是下楼？哪个方向更像你现在的生活？" },
+  { id:"elevator", n:"电梯", k:["电梯","升降机","轿厢","电梯门"],
+    p:"电梯常代表不需自己攀登的上升，也关乎你能不能用最小的力气改变位置。",
+    t:"电梯失控或骤降，常读作害怕进展以无法阻止的方式出错。与陌生人困在同一个小空间，也常带着压力。",
+    q:"梦里的电梯去了你想去的地方吗？" },
+  { id:"bridge", n:"桥", k:["桥","桥梁","过桥","断桥","吊桥","桥面"],
+    p:"桥常代表从一个生活阶段走向另一个阶段的过渡。",
+    t:"已经走上的桥，通常比还在犹豫的桥更有信息。断桥、缺板，则像过渡还不够安全。",
+    q:"桥的那一头是什么？你准备好了吗？" },
+  { id:"tunnel", n:"隧道与洞穴", k:["隧道","山洞","洞穴","地洞","地道","隧道尽头"],
+    p:"隧道和洞穴常代表正在穿行的一段过程，出口才是重点。",
+    t:"传统解读会看你是在往里走，还是往外找路。黑暗不一定危险，它也可能只是暂时没有光。",
+    q:"梦里你在往深处走，还是在找出口？" },
+  { id:"school", n:"学校与教室", k:["学校","教室","校园","课堂","考试楼","教学楼"],
+    p:"学校常代表被衡量、被评价的状态，而不只是学生时代的记忆。",
+    t:"常见解读会把学校直接联系到考试梦：旧的评价标准仍在后台运行，即使事情早已过去多年。",
+    q:"现在是谁在评价你，用什么标准？" },
+  { id:"sacred", n:"教堂与神圣场所", k:["教堂","寺庙","神殿","神社","礼拜","圣地","祭坛"],
+    p:"神圣场所常代表寻找意义，或需要安静、许可。",
+    t:"传统解读不一定针对宗教本身，而是关注你在那里寻找什么：答案、原谅，还是允许自己看重某件事。",
+    q:"梦里你在那个地方找什么？" },
+  { id:"garden", n:"花园、森林与植物", k:["花园","森林","树林","花草","种植","果园","草地"],
+    p:"生长中的地方常代表你正在培养的东西：关系、工作，或自己。",
+    t:"常见解读会看植物是否有人照料。修剪整齐，常像有意经营；过度蔓延，则像失去边界。",
+    q:"梦里那片地方有人照料，还是自己在生长？" },
+  { id:"roads", n:"道路与旅程", k:["道路","公路","旅程","十字路口","岔路","远方","开车上路"],
+    p:"道路常代表人生正在往哪里去，而不是现在过得好不好。",
+    t:"道路不断延伸，常读作时间本身；十字路口更像尚未作出的决定。梦里的速度也能说明你觉得有多少主动权。",
+    q:"梦里的路有目的地，还是只是不断向前？" },
+  { id:"keys", n:"钥匙", k:["钥匙","一串钥匙","找不到钥匙","锁孔","开锁"],
+    p:"钥匙常代表进入的资格：打开一扇你已经站在前面的门。",
+    t:"传统解读会留意钥匙是你找到、丢掉，还是交给了别人。它常与被允许、被拒绝和秘密有关。",
+    q:"有没有一扇门，你其实已经有钥匙，却一直没开？" },
+  { id:"money", n:"金钱", k:["钱","现金","钱包","钞票","金币","巨款","破产"],
+    p:"梦里的金钱常代表价值与安全感，更多指你觉得自己有多少余地，而不是账面数字。",
+    t:"捡到钱常读作被遗忘的资源；丢钱则偏向担心不稳定。传统解读通常认为你对金额的感受比数目更重要。",
+    q:"哪里让你觉得余地比实际需要的少？" },
+  { id:"phone", n:"手机与电话", k:["手机","电话","打电话","接电话","来电","铃声"],
+    p:"电话常代表联系，值得留意的是它怎样失灵。",
+    t:"响起的电话常指向需要回应的事；一直安静则像与某人失去联系。你接不接，也被看作对关系的态度。",
+    q:"如果知道对方一定会接，你会打给谁？" },
+  { id:"callfail", n:"打不通的电话", k:["打不通","拨不出去","没人接","电话断线","信号不好","无法接通"],
+    p:"电话打不通，常代表你渴望的接触暂时无法抵达。",
+    t:"常见解读把故障的设备看作关系距离的替身。重点不一定是电话，而是你有话想说却找不到对象。",
+    q:"最近谁很难联系？如果接通，你会说什么？" },
+  { id:"clothes", n:"衣服", k:["衣服","穿衣","换衣服","礼服","西装","裙子","穿错"],
+    p:"衣服常代表你如何呈现自己，也代表它遮住了多少真实。",
+    t:"穿错衣服常读作身处不合身的处境，是“当众赤裸”的温和版本。换装则常涉及角色变化。",
+    q:"梦里的你被打扮成了哪一版自己？" },
+  { id:"shoes", n:"鞋子与赤脚", k:["鞋子","鞋","赤脚","光脚","找不到鞋","鞋丢了","高跟鞋"],
+    p:"鞋子常代表脚下是否稳当，也关乎你为当前处境准备得够不够。",
+    t:"丢鞋常读作失去立足点或准备不足；赤脚则可能既脆弱又更贴近地面。梦里舒不舒服比鞋的款式更重要。",
+    q:"你现在站立的地方，你装备够了吗？" },
+  { id:"clocks", n:"时钟与手表", k:["时钟","钟表","手表","闹钟","时间停止","没时间","倒计时"],
+    p:"时钟常代表时间压力，或一种你已经感觉被时间衡量的生活。",
+    t:"停摆的钟常指某个期限已经不再重要，而不是警告。传统里，来不及和赶时间常同时出现。",
+    q:"你正背着一个其实没人替你设过的期限吗？" },
+  { id:"books", n:"书与书写", k:["书","书本","读书","写字","笔记本","书架","图书馆"],
+    p:"书和书写常代表被记录的知识：你需要学习，或需要说出的东西。",
+    t:"没读过的书，常像你已经知道却没打开的内容。梦里书写则更接近希望被理解。图书馆常是累积经验。",
+    q:"有什么是你一直想写下，却还没有落笔的？" },
+  { id:"fire", n:"火", k:["火","着火","大火","火焰","火灾","燃烧","冒烟"],
+    p:"火常代表强烈程度：情绪、势头，或已经脱离控制的东西。",
+    t:"传统解读会同时保留火的两面：毁灭与更新。可控的火像被善用的能量，蔓延的火则像溢出边界。",
+    q:"生活里什么热度，比你已经愿意承认的更高？" },
+  { id:"bags", n:"包与行李", k:["包","背包","行李","行李箱","手提箱","包袱"],
+    p:"包和行李常代表你正在携带的东西，也常常是你选择不放下的东西。",
+    t:"传统解读会留意包是否过重、拉不上，或忘了拿。它们常直接对应现实里的责任与旧经验。",
+    q:"有什么你仍然背着，其实现在可以放下？" },
+  { id:"rings", n:"戒指与首饰", k:["戒指","婚戒","项链","珠宝","首饰","手镯"],
+    p:"首饰常代表价值与承诺：被送出、被保留，或被期待的东西。",
+    t:"戒指尤其常与承诺有关。丢掉戒指的梦往往情绪很强，因为象征的不是物件，而是关系。",
+    q:"那个承诺现在对你意味着什么？是谁作出的？" },
+  { id:"food", n:"食物与吃", k:["食物","吃饭","吃东西","做饭","饿","冰箱","餐桌"],
+    p:"食物常代表你接收的东西，不只指饭，也可能是注意力、爱或信息。",
+    t:"常见解读会区分独自吃、与人共食和空桌子。空冰箱或空餐桌，常指向被安静忍耐的匮乏。",
+    q:"最近有什么是你吃进去了，却并不是自己真正想要的？" },
+  { id:"cars", n:"汽车与驾驶", k:["汽车","开车","驾驶","副驾驶","刹车","车祸","方向盘"],
+    p:"汽车常代表你对生活行进方式的掌控：谁在开、你看得清多少路。",
+    t:"坐副驾驶常像觉得自己没有多少决定权；刹车失灵则偏向害怕有东西停不下来。",
+    q:"梦里是谁在开车？现在同一件事又是谁在掌握方向？" },
+  { id:"transit", n:"火车、飞机与船", k:["火车","高铁","飞机","坐船","轮船","车站","机场","码头"],
+    p:"火车、飞机和船常代表你身处其中、却不负责驾驶的旅程。",
+    t:"常见解读强调方向由别人或环境设定。梦里是在途中，还是等出发，也常关乎主动与被动。",
+    q:"梦里你是在赶路，还是等待离开？" },
+  { id:"exam", n:"考试与测验", k:["考试","测验","考卷","答题","监考","交卷","考砸"],
+    p:"考试梦常代表你觉得某件事在考察自己，而自己还没有准备好。",
+    t:"这是成年人最常见的重复梦之一。离开学校多年仍梦见考试，常像旧评价标准仍在运行。",
+    q:"现在有什么像一张你没复习过的考卷？" },
+  { id:"work", n:"工作与办公室", k:["工作","上班","办公室","开会","同事","加班","职业"],
+    p:"梦里的工作常是衡量与被评估的场所，不一定和真实职业有关。",
+    t:"传统解读会留意你是否没准备好、被观看或被评价。它与考试梦常出自同一种压力。",
+    q:"梦里谁在给你的工作打分？现实中有人这样评价你吗？" },
+  { id:"searching", n:"丢失与寻找", k:["寻找","找东西","找不到","丢了","遍寻","翻找","忘了放哪"],
+    p:"寻找常代表你在找一个已经认定自己需要的东西。",
+    t:"常见解读认为丢失的物件只是替代物，真正丢的是掌控感。梦里很少能在醒来前找到。",
+    q:"有什么东西，你反复确认它还在？" },
+  { id:"bathroom", n:"找不到厕所", k:["厕所","卫生间","洗手间","公共厕所","找不到厕所","门锁着"],
+    p:"找厕所常代表一个基本需要被推迟了。",
+    t:"这是常见焦虑梦，重点通常不是房间，而是有没有允许自己停下来。过劳时期尤其常见。",
+    q:"你为了先满足谁，把自己的什么需要往后放了？" },
+  { id:"missed", n:"错过航班或火车", k:["错过飞机","错过火车","误机","赶不上车","错过班车","错过末班车"],
+    p:"错过出发常代表害怕一扇窗口正在关闭，而不是关于旅行的警告。",
+    t:"传统解读会看你是怎么错过的：奔跑、忘记、被耽误，各指向不同压力。最后有没有追上，也很关键。",
+    q:"你觉得机会正在消失吗？如果它已经消失，会意味着什么？" },
+  { id:"heights", n:"高处与边缘", k:["高处","悬崖","屋顶","楼顶","边缘","恐高","阳台","往下看"],
+    p:"高处常代表拥有得更多，也就更怕失去；站得越高，跌落的空间越大。",
+    t:"常见解读把高度与地位、进展联系起来。害怕并非一定会掉下，而是在担心自己守不住。",
+    q:"你现在拥有的什么比以前多？高处让你觉得安全吗？" },
+  { id:"waking", n:"醒不过来", k:["醒不过来","梦中梦","假醒","一直醒","还在梦里","困在梦里"],
+    p:"梦见自己醒不过来，常代表你觉得某件事无法停止。",
+    t:"传统解读常把它看作循环重来的情境。它也会与瘫痪、被困的梦一起出现，共同点是有努力却没变化。",
+    q:"有什么一次又一次回来，不管你多想让它过去？" },
+  { id:"earthquake", n:"地震与倒塌", k:["地震","地动","大楼倒塌","房屋倒塌","地面裂开","天塌"],
+    p:"地震常代表你脚下的假设同时松动了。",
+    t:"常见解读把它与稳定感被打破联系在一起。倒塌的建筑物常只在生活的一个领域里出现，不一定是更大灾难的预兆。",
+    q:"你一直觉得牢固的什么，也许承担了太多重量？" },
+  { id:"darkness", n:"黑暗", k:["黑暗","很黑","一片黑","停电","看不见路","没有灯"],
+    p:"黑暗通常代表不确定，而不是危险本身。",
+    t:"常见解读把黑暗看作未知。荣格派则把它描述为尚未被看见的内心部分。梦里你是否继续向前，很关键。",
+    q:"你现在在黑暗里做什么，其实可以把它带到光下？" },
+  { id:"light", n:"光与明亮", k:["光","亮光","阳光","闪光","刺眼","灯亮","日出"],
+    p:"明亮的光常代表清晰，或某件事已经无法再被忽略。",
+    t:"传统解读把光与理解联系起来。突如其来的闪光像领悟；亮得无法直视，可能说明你还没准备好接受那个答案。",
+    q:"最近有什么比你预想中更清楚？" }
+];
+
 /* ---------- how each group is described in the summary paragraph ---------- */
 var GROUP_NOTE = {
   "Water & weather": "feelings, mood, and how much of either you are holding",
@@ -810,6 +1220,62 @@ var GROUP_NOTE = {
   "Events & action": "pressure and performance — being measured, being late, being unable to move",
   "Light & dark": "how much you can see"
 };
+
+var GROUP_ZH = {
+  "Water & weather": "水与天气",
+  "Falling & motion": "坠落与移动",
+  "Body & self": "身体与自我",
+  "Animals": "动物",
+  "People & relationships": "人物与关系",
+  "Places & buildings": "地点与建筑",
+  "Objects & tools": "物件与工具",
+  "Events & action": "事件与行动",
+  "Light & dark": "光与暗"
+};
+
+var UI = {
+  zh: {
+    siteName: "你梦见什么？",
+    title: "你梦见什么？ · 梦境象征词典",
+    tagline: "像讲给朋友听那样写下来。零碎、混乱都没关系。",
+    dreamLabel: "你梦见了什么？",
+    placeholder: "我回到以前的学校，考试迟到了，却怎么都找不到教室。走进考场时，才发现所有人都在看我。",
+    inputHint: "尽量写出地点、人物、物件和发生的事。你输入的内容不会离开这个页面：没有服务器、没有账号，也不保存。解读来自固定的梦境象征词典，不是 AI。",
+    analyze: "查看我的梦",
+    sample: "试试示例",
+    clear: "清空",
+    browse: "翻看完整词典",
+    sources: "来源与方法",
+    privacy: "无账号，无追踪，无统计。",
+    moods: { afraid:"害怕", ashamed:"羞愧", relieved:"释然", calm:"平静", confusing:"说不通", unsure:"说不上来" }
+  },
+  en: {
+    siteName: "What Did You Dream?",
+    title: "What Did You Dream?",
+    tagline: "Write it the way you would tell someone. Messy is fine — fragments count.",
+    dreamLabel: "What did you dream?",
+    placeholder: "I was back in my old school, late for an exam I hadn't studied for. I couldn't find the classroom, and when I got there everyone was watching me.",
+    inputHint: "The more you name — places, people, objects, what happened — the more there is to work with. Nothing you type leaves this page: no server, no account, nothing saved. The readings come from a fixed, hand-written dictionary of dream symbols, not from AI.",
+    analyze: "Read my dream",
+    sample: "Try an example",
+    clear: "Clear",
+    browse: "Browse the full index",
+    sources: "Sources & method",
+    privacy: "No accounts, no tracking, no analytics.",
+    moods: { afraid:"Afraid", ashamed:"Ashamed", relieved:"Relieved", calm:"Calm", confusing:"It made no sense", unsure:"Can't say" }
+  }
+};
+
+var DICT_BY_ID = {};
+var DICT_ZH_BY_ID = {};
+for (var di = 0; di < DICT.length; di++) DICT_BY_ID[DICT[di].id] = DICT[di];
+for (var dzi = 0; dzi < DICT_ZH.length; dzi++) DICT_ZH_BY_ID[DICT_ZH[dzi].id] = DICT_ZH[dzi];
+
+function currentEntries() { return LANG === "zh" ? DICT_ZH : DICT; }
+function currentEntry(symbol) { return LANG === "zh" ? DICT_ZH_BY_ID[symbol.id] : symbol; }
+function groupLabel(symbol) {
+  return LANG === "zh" ? (GROUP_ZH[symbol.g] || symbol.g) : symbol.g;
+}
 
 /* =====================================================================
    MATCHING
@@ -871,7 +1337,48 @@ function countPhrase(tokens, key) {
   return hits;
 }
 
+function countChinese(text, key) {
+  var hits = 0;
+  var at = 0;
+  while ((at = text.indexOf(key, at)) !== -1) {
+    hits++;
+    at += Math.max(1, key.length);
+  }
+  return hits;
+}
+
+function analyseChinese(text) {
+  var plain = String(text).toLowerCase().replace(/\s+/g, "");
+  if (!plain) return { tokens: 0, found: [], score: 0 };
+
+  var found = [];
+  for (var i = 0; i < DICT_ZH.length; i++) {
+    var zh = DICT_ZH[i];
+    if (zh.id === "clothes" && /(?:没有?|未)穿(?:衣服|衣裤)?|裸体|赤裸/.test(plain)) continue;
+    var hits = 0;
+    var matched = [];
+    for (var j = 0; j < zh.k.length; j++) {
+      var c = countChinese(plain, zh.k[j]);
+      if (c > 0) {
+        hits += c;
+        matched.push(zh.k[j]);
+      }
+    }
+    if (hits > 0) {
+      var entry = DICT_BY_ID[zh.id];
+      if (entry) found.push({ symbol: entry, hits: hits, matched: matched, weak: false });
+    }
+  }
+
+  found.sort(function (a, b) {
+    if (b.hits !== a.hits) return b.hits - a.hits;
+    return DICT.indexOf(a.symbol) - DICT.indexOf(b.symbol);
+  });
+  return { tokens: plain.length, found: found };
+}
+
 function analyse(text) {
+  if (/[\u3400-\u9fff]/.test(String(text))) return analyseChinese(text);
   var tokens = normalise(text).split(" ").filter(Boolean);
   if (!tokens.length) return { tokens: 0, found: [], score: 0 };
 
@@ -913,6 +1420,10 @@ function escapeHtml(s) {
 
 function formatList(items) {
   if (items.length === 1) return items[0];
+  if (LANG === "zh") {
+    if (items.length === 2) return items[0] + "和" + items[1];
+    return items.slice(0, -1).join("、") + "，以及" + items[items.length - 1];
+  }
   if (items.length === 2) return items[0] + " and " + items[1];
   return items.slice(0, -1).join(", ") + ", and " + items[items.length - 1];
 }
@@ -932,8 +1443,24 @@ function groupCounts(found) {
 
 function buildSummary(strong, weakCount, mood) {
   var n = strong.length;
-  var names = strong.map(function (f) { return f.symbol.n.toLowerCase(); });
+  var names = strong.map(function (f) {
+    var s = currentEntry(f.symbol);
+    return LANG === "zh" ? s.n : s.n.toLowerCase();
+  });
   var out = [];
+
+  if (LANG === "zh") {
+    if (n === 1) {
+      out.push("词典在你的梦里找到一个明确象征：" + names[0] + "。");
+      out.push("单独一个象征还不足以构成完整解读，所以下面同时列出同组中常与它一起出现的两个条目，可以一起看。");
+    } else {
+      out.push("词典在梦里找到 " + n + " 个象征：" + formatList(names) + "。");
+    }
+    if (weakCount) out.push("另有一些条目只是碰巧命中一个日常词，我把它们折在下面，由你自己判断像不像。");
+    if (mood) out.push("你说当时感到“" + mood + "”。这个感受要和解释放在一起看：同样的水，对害怕的人和平静的人并不是同一个意思。");
+    out.push("这些都不是预言，也不是诊断。条目说的是这些象征在传统中通常被怎样理解；它在你身上意味着什么，还要看你梦里的感受，而那一部分不在任何词典里。");
+    return out.join("");
+  }
 
   if (n === 1) {
     out.push("Your dream had one thing in it the index knows: " + names[0] + ".");
@@ -957,8 +1484,12 @@ var NO_MATCH_IDS = ["water", "chased", "falling", "teeth", "late", "naked", "doo
 function suggestionNames() {
   var out = [];
   for (var i = 0; i < NO_MATCH_IDS.length; i++) {
-    for (var j = 0; j < DICT.length; j++) {
-      if (DICT[j].id === NO_MATCH_IDS[i]) { out.push(DICT[j].n.toLowerCase()); break; }
+    for (var j = 0; j < currentEntries().length; j++) {
+      if (currentEntries()[j].id === NO_MATCH_IDS[i]) {
+        var n = currentEntries()[j].n;
+        out.push(LANG === "zh" ? n : n.toLowerCase());
+        break;
+      }
     }
   }
   return out;
@@ -978,34 +1509,49 @@ function neighbors(entry, count) {
 function selectedMood() {
   var vals = [];
   var boxes = document.querySelectorAll('input[name="mood"]');
-  for (var i = 0; i < boxes.length; i++) if (boxes[i].checked) vals.push(boxes[i].value);
-  return vals.join(" and ");
+  for (var i = 0; i < boxes.length; i++) {
+    if (boxes[i].checked) vals.push(UI[LANG].moods[boxes[i].value] || boxes[i].value);
+  }
+  return vals.join(LANG === "zh" ? "、" : " and ");
 }
 
 function cardHtml(f) {
-  var s = f.symbol;
+  var s = currentEntry(f.symbol);
   var note = "";
   if (f.matched && f.matched.length) {
-    note = '<p class="matched">matched on: <em>' + escapeHtml(f.matched.join(", ")) + '</em></p>';
+    note = LANG === "zh"
+      ? '<p class="matched">命中词：<em>' + escapeHtml(f.matched.join("、")) + '</em></p>'
+      : '<p class="matched">matched on: <em>' + escapeHtml(f.matched.join(", ")) + '</em></p>';
   } else if (f.neighbor) {
-    note = '<p class="matched">shown because it usually appears alongside the entry above</p>';
+    note = LANG === "zh"
+      ? '<p class="matched">同组联想，常与上面的象征一起出现</p>'
+      : '<p class="matched">shown because it usually appears alongside the entry above</p>';
   }
+  var labels = LANG === "zh"
+    ? ["可以想一想", "直白的意思", "传统怎么说"]
+    : ["Worth sitting with", "Plain meaning", "What tradition says"];
   return '<article class="symbol">' +
-    '<div class="name"><h3>' + escapeHtml(s.n) + '</h3><span class="group">' + escapeHtml(s.g) + '</span></div>' +
+    '<div class="name"><h3>' + escapeHtml(s.n) + '</h3><span class="group">' + escapeHtml(groupLabel(f.symbol)) + '</span></div>' +
     note +
-    '<p class="line"><b>Worth sitting with</b>' + escapeHtml(s.q) + '</p>' +
-    '<p class="line"><b>Plain meaning</b>' + escapeHtml(s.p) + '</p>' +
-    '<p class="line"><b>What tradition says</b>' + escapeHtml(s.t) + '</p>' +
+    '<p class="line"><b>' + labels[0] + '</b>' + escapeHtml(s.q) + '</p>' +
+    '<p class="line"><b>' + labels[1] + '</b>' + escapeHtml(s.p) + '</p>' +
+    '<p class="line"><b>' + labels[2] + '</b>' + escapeHtml(s.t) + '</p>' +
     '</article>';
 }
 
 function render(result) {
   var box = document.getElementById("results");
   var found = result.found;
+  var restart = '<div class="result-actions"><button class="primary" type="button" data-restart>' +
+    (LANG === "zh" ? "再写一个梦" : "Describe another dream") + '</button></div>';
 
   if (!result.tokens) {
-    box.innerHTML = '<div class="panel"><p class="kicker">Nothing to read yet</p>' +
-      '<p class="empty">Write a few lines about the dream first, then press <b>Read my dream</b>.</p></div>';
+    box.innerHTML = '<div class="panel"><p class="kicker">' +
+      (LANG === "zh" ? "还没有内容可读" : "Nothing to read yet") + '</p>' +
+      '<p class="empty">' +
+      (LANG === "zh" ? "先写几句梦里的内容，再点" : "Write a few lines about the dream first, then press ") +
+      '<b>' + UI[LANG].analyze + '</b>' +
+      (LANG === "zh" ? "。" : ".") + '</p></div>';
     box.hidden = false;
     return;
   }
@@ -1013,12 +1559,18 @@ function render(result) {
   if (!found.length) {
     box.innerHTML =
       '<div class="panel">' +
-      '<p class="kicker">Nothing in the index matched</p>' +
-      '<p>The index did not recognize anything in what you wrote. That usually means the dream was told as a mood or a scene rather than with the things that were in it.</p>' +
-      '<p>Try naming what you actually saw — the people, animals, places and objects. The ones that come up most often are ' +
-      escapeHtml(formatList(suggestionNames())) + '.</p>' +
-      '<p>Or open <b>Browse the full index</b> below: ' + DICT.length +
-      ' entries, and the one that makes you stop is usually the one worth reading.</p>' +
+      '<p class="kicker">' + (LANG === "zh" ? "词典没有找到明确象征" : "Nothing in the index matched") + '</p>' +
+      (LANG === "zh"
+        ? '<p>可能你写下的更像一种气氛或完整场景，而没有出现词典收录的具体对象。</p>' +
+          '<p>试着补上你真正看见的东西：人物、动物、地点、物件。最常出现的条目有 ' +
+          escapeHtml(formatList(suggestionNames())) + '。</p>' +
+          '<p>也可以翻看下方的完整词典。共 ' + DICT_ZH.length + ' 条；让你停下来的那一句，往往就是值得读的。</p>'
+        : '<p>The index did not recognize anything in what you wrote. That usually means the dream was told as a mood or a scene rather than with the things that were in it.</p>' +
+          '<p>Try naming what you actually saw — the people, animals, places and objects. The ones that come up most often are ' +
+          escapeHtml(formatList(suggestionNames())) + '.</p>' +
+          '<p>Or open <b>Browse the full index</b> below: ' + DICT.length +
+          ' entries, and the one that makes you stop is usually the one worth reading.</p>') +
+      restart +
       '</div>';
     box.hidden = false;
     return;
@@ -1031,34 +1583,39 @@ function render(result) {
   var mood = selectedMood();
   var lead = (strong.length === 1) ? strong.concat(neighbors(strong[0].symbol, 2)) : strong;
 
-  var chips = strong.map(function (f) { return '<li>' + escapeHtml(f.symbol.n) + '</li>'; }).join("");
+  var chips = strong.map(function (f) {
+    return '<li>' + escapeHtml(currentEntry(f.symbol).n) + '</li>';
+  }).join("");
 
   var top = lead.slice(0, 3);
   var more = lead.slice(3);
   var cards = top.map(cardHtml).join("");
   if (more.length) {
-    cards += '<details class="more"><summary>Everything else that matched (' + more.length +
-             ')</summary>' + more.map(cardHtml).join("") + '</details>';
+    cards += '<details class="more"><summary>' +
+      (LANG === "zh" ? "其他命中的象征（" : "Everything else that matched (") + more.length +
+      (LANG === "zh" ? '）' : ')') + '</summary>' + more.map(cardHtml).join("") + '</details>';
   }
 
   var weakHtml = "";
   if (weak.length) {
-    weakHtml = '<div class="panel"><details class="more"><summary>May also fit, on a single everyday word (' +
+    weakHtml = '<div class="panel"><details class="more"><summary>' +
+      (LANG === "zh" ? "也可能相关：只命中一个日常词（" : "May also fit, on a single everyday word (") +
       weak.length + ')</summary>' + weak.map(cardHtml).join("") + '</details></div>';
   }
 
   box.innerHTML =
     '<div class="panel">' +
-      '<p class="kicker">What the dictionary found</p>' +
+      '<p class="kicker">' + (LANG === "zh" ? "词典找到的象征" : "What the dictionary found") + '</p>' +
       '<ul class="chips">' + chips + '</ul>' +
     '</div>' +
     '<div class="panel">' +
-      '<h2>Putting it together</h2>' +
+      '<h2>' + (LANG === "zh" ? "放在一起看" : "Putting it together") + '</h2>' +
       '<p>' + escapeHtml(buildSummary(strong, weak.length, mood)) + '</p>' +
     '</div>' +
     '<div class="panel">' +
-      '<h2>The symbols, one by one</h2>' +
+      '<h2>' + (LANG === "zh" ? "逐个看这些象征" : "The symbols, one by one") + '</h2>' +
       cards +
+      restart +
     '</div>' +
     weakHtml;
   box.hidden = false;
@@ -1069,16 +1626,20 @@ function render(result) {
    ===================================================================== */
 function renderBrowse() {
   var host = document.getElementById("browse-body");
+  var entries = currentEntries();
   var byGroup = {};
   var order = [];
-  for (var i = 0; i < DICT.length; i++) {
-    var g = DICT[i].g;
+  for (var i = 0; i < entries.length; i++) {
+    var base = DICT_BY_ID[entries[i].id];
+    var g = base ? base.g : "";
     if (!byGroup[g]) { byGroup[g] = []; order.push(g); }
-    byGroup[g].push(DICT[i]);
+    byGroup[g].push(entries[i]);
   }
-  var html = "<p class=\"hint\">" + DICT.length + " symbols.</p>";
+  var html = "<p class=\"hint\">" +
+    (LANG === "zh" ? "共 " + entries.length + " 条。" : entries.length + " symbols.") + "</p>";
   for (var j = 0; j < order.length; j++) {
-    html += '<p class="letter">' + escapeHtml(order[j]) + '</p>';
+    var group = DICT_BY_ID[byGroup[order[j]][0].id];
+    html += '<p class="letter">' + escapeHtml(groupLabel(group)) + '</p>';
     for (var m = 0; m < byGroup[order[j]].length; m++) {
       var s = byGroup[order[j]][m];
       html += '<p class="browse-item"><b>' + escapeHtml(s.n) + '</b> — ' + escapeHtml(s.p) + '</p>';
@@ -1094,6 +1655,8 @@ var SAMPLE = "I was back in my old school, late for an exam I hadn't studied for
   "I kept trying to find the classroom but the hallways kept changing and I got lost. " +
   "When I finally walked in, I realized I was naked and everyone was watching me. " +
   "Then the floor turned to water and I started sinking.";
+var SAMPLE_ZH = "我回到以前的学校，考试迟到了，却怎么都找不到教室。走廊一直变，我也迷了路。" +
+  "终于走进考场时，才发现自己没穿衣服，所有人都在看我。后来地面变成了水，我开始往下沉。";
 
 function run() {
   var text = document.getElementById("dream").value;
@@ -1105,17 +1668,56 @@ function run() {
 }
 
 function applySiteName() {
-  document.title = SITE_NAME;
+  var copy = UI[LANG];
+  SITE_NAME = copy.siteName;
+  document.title = copy.title;
   var h1 = document.getElementById("site-name");
   var f = document.getElementById("footer-name");
   if (h1) h1.textContent = SITE_NAME;
   if (f) f.textContent = SITE_NAME;
+  var tagline = document.getElementById("tagline");
+  var label = document.getElementById("dream-label");
+  var dream = document.getElementById("dream");
+  var hint = document.getElementById("input-hint");
+  var privacy = document.getElementById("privacy-note");
+  if (tagline) tagline.textContent = copy.tagline;
+  if (label) label.textContent = copy.dreamLabel;
+  if (dream) dream.placeholder = copy.placeholder;
+  if (hint) hint.textContent = copy.inputHint;
+  if (privacy) privacy.textContent = copy.privacy;
+  document.getElementById("analyze").textContent = copy.analyze;
+  document.getElementById("sample").textContent = copy.sample;
+  document.getElementById("clear").textContent = copy.clear;
+  document.getElementById("browse-summary").textContent = copy.browse;
+  document.getElementById("sources-summary").textContent = copy.sources;
+  var langButtons = document.querySelectorAll("[data-lang]");
+  for (var i = 0; i < langButtons.length; i++) {
+    langButtons[i].setAttribute("aria-pressed", langButtons[i].getAttribute("data-lang") === LANG ? "true" : "false");
+  }
+}
+
+function setLanguage(next) {
+  LANG = next === "en" ? "en" : "zh";
+  try { localStorage.setItem("dream.lang", LANG); } catch (e) {}
+  document.documentElement.lang = LANG === "zh" ? "zh-CN" : "en";
+  applySiteName();
+  renderBrowse();
+  var box = document.getElementById("results");
+  var text = document.getElementById("dream").value;
+  if (box && !box.hidden && text.trim()) render(analyse(text));
 }
 
 function init() {
+  document.documentElement.lang = LANG === "zh" ? "zh-CN" : "en";
   applySiteName();
   renderBrowse();
   document.getElementById("analyze").addEventListener("click", run);
+  var langButtons = document.querySelectorAll("[data-lang]");
+  for (var b = 0; b < langButtons.length; b++) {
+    langButtons[b].addEventListener("click", function () {
+      setLanguage(this.getAttribute("data-lang"));
+    });
+  }
   /* 勾选/取消"当时什么感觉"后，若已有结果就顺手重算一次 */
   var moods = document.querySelectorAll('input[name="mood"]');
   for (var i = 0; i < moods.length; i++) {
@@ -1125,7 +1727,7 @@ function init() {
     });
   }
   document.getElementById("sample").addEventListener("click", function () {
-    document.getElementById("dream").value = SAMPLE;
+    document.getElementById("dream").value = LANG === "zh" ? SAMPLE_ZH : SAMPLE;
     run();
   });
   document.getElementById("clear").addEventListener("click", function () {
@@ -1137,6 +1739,19 @@ function init() {
     box.innerHTML = "";
     document.getElementById("dream").focus();
   });
+  document.getElementById("results").addEventListener("click", function (event) {
+    var restart = event.target.closest("[data-restart]");
+    if (!restart) return;
+    document.getElementById("dream").value = "";
+    var moods3 = document.querySelectorAll('input[name="mood"]');
+    for (var m = 0; m < moods3.length; m++) moods3[m].checked = false;
+    var box = document.getElementById("results");
+    box.hidden = true;
+    box.innerHTML = "";
+    var dream = document.getElementById("dream");
+    dream.scrollIntoView({ behavior: "smooth", block: "center" });
+    dream.focus();
+  });
 }
 
 if (document.readyState === "loading") {
@@ -1146,7 +1761,14 @@ if (document.readyState === "loading") {
 }
 
 /* Small hook so the file can be checked from a script or the console. */
-window.DreamIndex = { analyse: analyse, DICT: DICT, render: render, siteName: SITE_NAME };
+window.DreamIndex = {
+  analyse: analyse,
+  DICT: DICT,
+  DICT_ZH: DICT_ZH,
+  render: render,
+  setLanguage: setLanguage,
+  get siteName() { return SITE_NAME; }
+};
 </script>
 </body>
 </html>
